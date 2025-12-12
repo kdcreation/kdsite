@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Communication Control</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a4d2e 0%, #2d5016 50%, #1f3a1f 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    * { box-sizing: border-box; }
+
+    /* Top Navigation */
+    .top-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid rgba(255,255,255,0.2);
+      border-radius: 0 0 0% 0%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      z-index: 999;
+      padding: 0;
+    }
+    .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 1.2px auto; height: 50px;}
+    .nav-item { position: relative;}
+    .nav-button {
+      width: 150px;
+      height: 40px;
+      background: none;
+      margin: 0.5px;
+      padding: 0px 0px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 1.5px solid rgba(0, 38, 77, 0.8);
+      border-radius: 0 0 5% 5%;
+    }
+    .nav-button:hover {
+      background: rgba(255,255,255,0.15);
+      border-bottom-color: #a8e6cf;
+      color: #a8e6cf;
+    }
+    .dropdown {
+      position: absolute;
+      top: 100%; left: 0;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      min-width: 200px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      opacity: 0; visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      border-radius: 0 0 8px 8px;
+      border: 1px solid rgba(255,255,255,0.5);
+      z-index: 1001;
+    }
+    .nav-item:hover .dropdown {
+      opacity: 1; visibility: visible; transform: translateY(0);
+    }
+    .dropdown a {
+      display: block;
+      padding: 12px 20px;
+      color: #ffffff;
+      text-decoration: none;
+      transition: background 0.3s ease;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      border-radius: 0 0 5% 5%;
+    }
+    .dropdown a:last-child {
+      border-bottom: none;
+      border-radius: 0 0 8px 8px;
+    }
+    .dropdown a:hover {
+      background: rgba(255,255,255,0.2);
+      color: #a8e6cf;
+      padding-left: 25px;
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      position: fixed;
+      left: 0; top: 55px; bottom: 47px;
+      width: 250px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-right: 1px solid rgba(255,255,255,0.2);
+      z-index: 1000;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.07);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      /* Footer overlaps, so no padding-bottom for footer! */
+    }
+    .sidebar-header {
+      padding: 12px;
+      background: rgba(255,255,255,0.05);
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 38, 77, 0.8);
+      border-radius: 0 0 1% 1%;
+      flex: none;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .sidebar-menu {
+      list-style: none;
+      padding: 0; margin: 0;
+      overflow-y: auto;
+      flex: 1 1 auto;
+    }
+    /* Sidebar submenu styling -- keep as original */
+    .sidebar-menu-item { border-bottom: 1px solid rgba(0, 38, 77, 0.8);}
+    .sidebar-button {
+      width: 100%; background: none; border: none;
+      padding: 15px 20px; color: #fff;
+      text-align: left; cursor: pointer;
+      transition: background 0.3s; font-size: 16px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid rgba(0, 38, 77, 0.9);
+    }
+    .sidebar-button:hover { background: rgba(255,255,255,0.15);}
+    .sidebar-button.active { background: rgba(255,255,255,0.2); color: #a8e6cf;}
+    .sidebar-arrow { transition: transform 0.3s ease; font-size: 12px; }
+    .sidebar-arrow.rotated { transform: rotate(90deg);}
+    .sidebar-submenu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: rgba(0,0,0,0.2);
+    }
+    .sidebar-submenu.open { max-height: 300px; }
+    .sidebar-submenu a {
+      display: block;
+      padding: 12px 20px 12px 40px;
+      color: #e0e0e0;
+      text-decoration: none;
+      transition: all 0.3s;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .sidebar-submenu a:last-child { border-bottom: none;}
+    .sidebar-submenu a:hover {
+      background: rgba(255,255,255,0.1);
+      color: #a8e6cf;
+      padding-left: 45px;
+    }
+
+    /* Right Sidebar */
+    .right-sidebar {
+      position: fixed;
+      right: 0; top: 55px; bottom: 47px;
+      width: 300px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-left: 1px solid rgba(255,255,255,0.2);
+      z-index: 1000;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.07);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      /* Footer overlaps, so no padding-bottom! */
+    }
+    .right-sidebar-fixed-header {
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.1);
+      z-index: 10;
+      padding: 10px;
+      flex: none;
+    }
+    .right-sidebar-header {
+      color: white; font-size: 20px; font-weight: bold; margin-bottom: 10px; text-align: center; padding-bottom: 5px; border-bottom: 2px solid rgba(255,255,255,0.3);
+    }
+    .search-container { margin-bottom: 0;}
+    .search-input {
+      width: 100%;
+      padding: 10px 15px;
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 10px;
+      color: white;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s;
+    }
+    .search-input::placeholder { color: rgba(255,255,255,0.7);}
+    .search-input:focus {
+      background: rgba(255,255,255,0.25);
+      border-color: #a8e6cf;
+    }
+    .menu-list {
+      list-style: none;
+      padding: 8px;
+      margin: 0;
+      overflow-y: auto;
+      flex: 1 1 auto;
+    }
+    .menu-item {
+      padding: 9px 15px;
+      background: rgba(255,255,255,0.12);
+      margin-bottom: 5px;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-bottom: 2px solid rgba(0,0,0,0.9);
+    }
+    .menu-item:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateX(-5px);
+      color: #a8e6cf;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-top: 80px;
+      padding: 40px 20px 180px 20px;
+      margin-left: 250px;
+      margin-right: 280px;
+      min-height: 400px;
+    }
+    .main-content.shifted { transform: translateY(200px); }
+    .content-card {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.1);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    }
+    .page-heading {
+      font-size: 32px;
+      color: #ddd;
+      margin: 0 0 10px 0;
+      text-align: center;
+      font-weight: 700;
+    }
+    .welcome-text {
+      font-size: 18px;
+      color: #ddd;
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+    
+    /* Main Content task table */
+    
+    h2 {
+      color: #00e673;
+      text-align: center;
+      border-bottom: 1px solid #000;
+      padding-bottom: 5px;
+      margin-bottom: 0.5rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0px;
+      background-color: #lelele;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    th, td {
+      color: #00e673;
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 0.1px solid #333;
+      border-spacing: 0;
+    }
+    thead th {
+      background-color: ;
+      color: #121212;
+      font-weight: bold;
+      border-spacing: 1px;
+    }
+   
+    tbody tr:hover {
+      background-color: #333;
+    }
+    /* Neon border highlight for today's row */
+    .today-row {
+      border: 1px solid #ff69b4;
+      box-shadow: 0 0 5px #ff69b4, 0 0 5px #00bfff, 0 0 1px #32cd32;
+      animation: pulse 3.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 5px #ff69b4, 0 0 5px #00bfff, 0 0 1px #32cd32; }
+      50% { box-shadow: 0 0 2px #ff0000, 0 0 2px #ff0000, 0 0 1px #32cd32; }
+    }
+
+    /* Footer */
+    .footer {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-top: 2px solid rgba(255,255,255,0.2);
+      padding: 10px;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.12);
+      z-index: 1100;
+      min-height: 40px;
+      display: flex; align-items: center;
+    }
+    .footer-content { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 15px;}
+    .social-media { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;}
+    .social-button {
+      width: 25px; height: 25px; border-radius: 50%; border: none; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; font-size: 20px; color: white; text-decoration: none;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .social-button:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.18);}
+    .social-facebook { background: #1877f2;}
+    .social-twitter { background: #1da1f2;}
+    .social-youtube { background: #ff0000;}
+    .social-instagram { background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);}
+    .social-linkedin { background: #0077b5;}
+    
+
+    @media (max-width: 1024px) {
+      .sidebar { width: 220px;}
+      .right-sidebar { width: 250px;}
+      .main-content { margin-left: 220px; margin-right: 250px;}
+      .nav-button { padding: 18px 25px; font-size: 15px;}
+    }
+    @media (max-width: 768px) {
+      .sidebar { width: 200px;}
+      .right-sidebar { width: 200px;}
+      .main-content { margin-left: 200px; margin-right: 200px;}
+    }
+    @media (max-width: 480px) {
+      .sidebar, .right-sidebar { width: 140px;}
+      .main-content { margin-left: 140px; margin-right: 140px;}
+      .sidebar-header, .right-sidebar-header { font-size: 14px; padding: 12px;}
+      .sidebar-button, .menu-item { font-size: 13px;}
+      .content-card { padding: 18px 6px;}
+      .page-heading { font-size: 22px;}
+    }
+    
+    @media (max-width: 880px) {
+  .top-nav .nav-container {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+  }
+  .nav-item {
+    width: 100%;
+  }
+  .nav-button { width: 100%; font-size: 15px; }
+  .dropdown {
+    left: 0;
+    min-width: 100vw;
+    border-radius: 0 0 10px 10px;
+    box-shadow: none;
+  }
+  .sidebar, .right-sidebar {
+    position: static;
+    width: 100vw;
+    margin: 0;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-height: none;
+  }
+  .main-content {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 10px 5px 120px 5px;
+  }
+  .content-card {
+    max-width: 99vw;
+    padding: 16px 2vw;
+  }
+}
+@media (max-width: 600px) {
+  .top-nav, .sidebar, .right-sidebar {
+    font-size: 13px;
+  }
+  .nav-button {
+    font-size: 13px;
+    height: auto;
+    padding: 8px;
+  }
+  .dropdown a {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  .main-content {
+    margin-top: 60px;
+    min-height: 200px;
+    padding: 6px 2vw 100px 2vw;
+  }
+  .content-card {
+    max-width: 98vw;
+    padding: 8px 2vw;
+  }
+  .footer {
+    padding: 7px;
+  }
+  table, th, td {
+    font-size: 12px;
+    padding: 7px;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <!-- Left Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">Menu</div>
+    <ul class="sidebar-menu">
+      <li class="sidebar-menu-item"><button class="sidebar-button" data-menu="dashboard"> <span>Dashboard</span> <span class="sidebar-arrow">▶</span> </button>
+        <div class="sidebar-submenu"><a href="#overview">Overview</a><a href="#analytics">Analytics</a><a href="#reports">Reports</a><a href="#statistics">Statistics</a><a href="#insights">Insights</a></div>
+      </li>
+      <li class="sidebar-menu-item"><button class="sidebar-button" data-menu="messages"> <span>Messages</span> <span class="sidebar-arrow">▶</span> </button>
+        <div class="sidebar-submenu"><a href="#inbox">Inbox</a><a href="#sent">Sent</a><a href="#drafts">Drafts</a><a href="#archived">Archived</a><a href="#spam">Spam</a></div>
+      </li>
+      <li class="sidebar-menu-item"><button class="sidebar-button" data-menu="contacts"> <span>Contacts</span> <span class="sidebar-arrow">▶</span> </button>
+        <div class="sidebar-submenu"><a href="#all-contacts">All Contacts</a><a href="#favorites">Favorites</a><a href="#groups">Groups</a><a href="#recent">Recent</a><a href="#blocked">Blocked</a></div>
+      </li>
+      <li class="sidebar-menu-item"><button class="sidebar-button" data-menu="settings"> <span>Settings</span> <span class="sidebar-arrow">▶</span> </button>
+        <div class="sidebar-submenu"><a href="#account">Account</a><a href="#privacy">Privacy</a><a href="#notifications">Notifications</a><a href="#appearance">Appearance</a><a href="#security">Security</a></div>
+      </li>
+      <li class="sidebar-menu-item"><button class="sidebar-button" data-menu="profile"> <span>Profile</span> <span class="sidebar-arrow">▶</span> </button>
+        <div class="sidebar-submenu">
+        <a href="#" onclick="loadPage('https://script.google.com/macros/s/AKfycbwtqel85Y8GFEa3rnQidIsTCrC3vBfTRYczth9xJCCkfbVoTs9c-awQcmuUlc3rMTaQyg/exec')">Attendance</a>
+        <a href="#preferences">Preferences</a>
+        <a href="#activity">Activity</a>
+        <a href="#achievements">Achievements</a>
+        <a href="#history">History</a></div>
+      </li>
+    </ul>
+  </nav>
+  
+  <!-- Top Nav -->
+<nav class="top-nav">
+  <div class="nav-container">
+
+    <!-- HOME BUTTON WITHOUT DROPDOWN -->
+    <div class="nav-item">
+      <button class="nav-button" onclick="goHome()">🏛️ Home</button>
+    </div>
+
+    <!-- COMMUNICATION DROPDOWN -->
+    <div class="nav-item">
+      <button class="nav-button">Communication</button>
+      <div class="dropdown">
+        <a href="#messages">Messages</a>
+        <a href="#chat">Chat</a>
+        <a href="#video-call">Video Call</a>
+        <a href="#voice-call">Voice Call</a>
+        <a href="#email">Email</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <button class="nav-button">Contacts</button>
+      <div class="dropdown">
+        <a href="#all-contacts">All Contacts</a>
+        <a href="#favorites">Favorites</a>
+        <a href="#groups">Groups</a>
+        <a href="#recent">Recent</a>
+        <a href="#blocked">Blocked</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <button class="nav-button">Settings</button>
+      <div class="dropdown">
+        <a href="#account">Account</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#notifications">Notifications</a>
+        <a href="#appearance">Appearance</a>
+        <a href="#security">Security</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <button class="nav-button">Media</button>
+      <div class="dropdown">
+        <a href="#photos">Photos</a>
+        <a href="#videos">Videos</a>
+        <a href="#documents">Documents</a>
+        <a href="#audio">Audio</a>
+        <a href="#links">Links</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <button class="nav-button">Help</button>
+      <div class="dropdown">
+        <a href="#faq">FAQ</a>
+        <a href="#support">Support</a>
+        <a href="#tutorials">Tutorials</a>
+        <a href="#feedback">Feedback</a>
+        <a href="#about">About</a>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+  
+  <!-- Right Sidebar -->
+  <aside class="right-sidebar">
+    <div class="right-sidebar-fixed-header">
+      <div class="right-sidebar-header">Quick Access</div>
+      <div class="search-container"><input type="text" id="searchInput" class="search-input" placeholder="Search items..."></div>
+    </div>
+    <ul class="menu-list" id="menuList">
+      <li class="menu-item">Account Settings</li>
+      <li class="menu-item">Activity Log</li>
+      <li class="menu-item">Analytics Dashboard</li>
+      <li class="menu-item">Appearance</li>
+      <li class="menu-item">Archived Messages</li>
+      <li class="menu-item">Blocked Contacts</li>
+      <li class="menu-item">Chat History</li>
+      <li class="menu-item">Contact Groups</li>
+      <li class="menu-item">Dashboard Overview</li>
+      <li class="menu-item">Data Export</li>
+      <li class="menu-item">Email Settings</li>
+      <li class="menu-item">Favorite Contacts</li>
+      <li class="menu-item">File Manager</li>
+      <li class="menu-item">Help Center</li>
+      <li class="menu-item">Inbox</li>
+      <li class="menu-item">Language Settings</li>
+      <li class="menu-item">Media Gallery</li>
+      <li class="menu-item">Notifications</li>
+      <li class="menu-item">Privacy Settings</li>
+      <li class="menu-item">Profile Information</li>
+      <li class="menu-item">Recent Activity</li>
+      <li class="menu-item">Reports</li>
+      <li class="menu-item">Security Settings</li>
+      <li class="menu-item">Sent Messages</li>
+      <li class="menu-item">Statistics</li>
+      <li class="menu-item">Support Tickets</li>
+      <li class="menu-item">Theme Customization</li>
+      <li class="menu-item">User Preferences</li>
+      <li class="menu-item">Video Calls</li>
+      <li class="menu-item">Voice Messages</li>
+    </ul>
+  </aside>
+  <!-- Main Content -->
+  <main class="main-content" id="mainContent">
+  <!-- Dynamic Loader -->
+      <iframe id="contentFrame" src="" style="
+        width:100%;
+        height:80vh;
+        border:none;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.05);
+        display: none;
+      "></iframe>
+    <div class="content-card">
+      <h1 class="page-heading" id="pageHeading">Personal Communication Control</h1>
+      <p class="welcome-text" id="welcomeText">Welcome to your personal communication hub. Manage all your conversations, contacts, and settings in one place.</p>
+      <!-- TASK SECTION -->
+      <div class="task-card">
+        <h2>Upcoming Important Tasks</h2>
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Task For</th><th>Task Details</th></tr>
+          </thead>
+          <tbody id="taskBody"><tr><td colspan="3">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="social-media"><a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-button social-facebook" title="Facebook">f</a> <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="social-button social-twitter" title="Twitter">𝕏</a> <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="social-button social-youtube" title="YouTube">▶</a> <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-button social-instagram" title="Instagram">📷</a> <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-button social-linkedin" title="LinkedIn">in</a></div>
+      
+    </div>
+  </footer>
+  <script>
+    // Sidebar accordion functionality
+    const sidebarButtons = document.querySelectorAll('.sidebar-button');
+    sidebarButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const submenu = button.nextElementSibling;
+        const arrow = button.querySelector('.sidebar-arrow');
+        const isOpen = submenu.classList.contains('open');
+        document.querySelectorAll('.sidebar-submenu').forEach(menu => { menu.classList.remove('open'); });
+        document.querySelectorAll('.sidebar-arrow').forEach(arr => { arr.classList.remove('rotated'); });
+        document.querySelectorAll('.sidebar-button').forEach(btn => { btn.classList.remove('active'); });
+        if (!isOpen) {
+          submenu.classList.add('open');
+          arrow.classList.add('rotated');
+          button.classList.add('active');
+        }
+      });
+    });
+    
+    // Show page in main content area in same page
+    function loadPage(url) {
+    // Show iframe
+    const frame = document.getElementById('contentFrame');
+    frame.style.display = "block";
+    frame.src = url;
+
+    // Hide home welcome section
+    document.querySelector('.content-card').style.display = "none";
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+    
+    
+    // Shift main content when nav hovered
+    const navItems = document.querySelectorAll('.nav-item');
+    const mainContent = document.getElementById('mainContent');
+    navItems.forEach(item => {
+      item.addEventListener('mouseenter', () => { mainContent.classList.add('shifted'); });
+      item.addEventListener('mouseleave', () => { mainContent.classList.remove('shifted'); });
+    });
+    
+    // Apni Google Sheets ka publish as csv wala link yahan dalein:
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTplfPtMJkKImLY81ARasHR5_oCARDV21n5E7UG7gVQYeZ87WALi07ML4V3JBYbGZ7CN0C0TGEdQ2n_/pub?output=csv';
+
+    // CSV parsing with support for quoted fields
+    function parseCSV(text) {
+      const lines = text.trim().split(/\r?\n/);
+      return lines.map(line => {
+        const regex = /("([^"]|"")*"|[^,]+|)(?=,|$)/g;
+        return [...line.matchAll(regex)].map(match => {
+          let val = match[1] || "";
+          val = val.replace(/^"|"$/g, "").replace(/""/g, '"');
+          return val.trim();
+        }).filter(Boolean);
+      });
+    }
+
+    function isValidDate(d) {
+      return d instanceof Date && !isNaN(d.valueOf());
+    }
+
+    async function loadTasks() {
+      try {
+        const response = await fetch(csvUrl);
+        const csvText = await response.text();
+
+        const rows = parseCSV(csvText);
+        const dataRows = rows.slice(1).filter(row => row.length >= 3 && row[0] && row[1] && row[2]);
+
+        const tasks = dataRows.map(row => {
+          return {
+            date: new Date(row[0]),
+            forWhom: row[1],
+            task: row[2]
+          };
+        }).filter(t => isValidDate(t.date));
+
+        tasks.sort((a, b) => a.date - b.date);
+
+        // Select only 5 upcoming tasks
+        const upcomingTasks = tasks.slice(0, 3);
+
+        const tbody = document.getElementById('taskBody');
+        tbody.innerHTML = '';
+
+        if (upcomingTasks.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="3">No upcoming tasks found.</td></tr>';
+          return;
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Remove time part for comparison
+
+        upcomingTasks.forEach(task => {
+          const tr = document.createElement('tr');
+          const taskDate = new Date(task.date);
+          taskDate.setHours(0, 0, 0, 0); // Remove time part for comparison
+
+          if (taskDate.getTime() === today.getTime()) {
+            tr.classList.add('today-row');
+          }
+
+          tr.innerHTML = `
+            <td>${task.date.toLocaleDateString()}</td>
+            <td>${task.forWhom}</td>
+            <td>${task.task}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (error) {
+        document.getElementById('taskBody').innerHTML = '<tr><td colspan="3">Error loading tasks.</td></tr>';
+        console.error('Error fetching or parsing data:', error);
+      }
+    }
+
+    loadTasks();
+    
+  
+   
+    // Search functionality for right sidebar
+    const searchInput = document.getElementById('searchInput');
+    const menuList = document.getElementById('menuList');
+    const menuItems = Array.from(menuList.getElementsByClassName('menu-item'));
+    searchInput.addEventListener('input', function(e) {
+      const searchQuery = e.target.value.toLowerCase();
+      menuItems.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(searchQuery) ? 'block' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>
