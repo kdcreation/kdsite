@@ -1,723 +1,1258 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Communication Control</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1a4d2e 0%, #2d5016 50%, #1f3a1f 100%);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    * { box-sizing: border-box; }
-
-    /* Top Navigation */
-    .top-nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      border-bottom: 2px solid rgba(255,255,255,0.2);
-      border-radius: 0 0 0% 0%;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      z-index: 999;
-      padding: 0;
-    }
-    .nav-container { display: flex; justify-content: center; align-items: center; max-width: 1200px; margin: 1.2px auto; height: 50px;}
-    .nav-item { position: relative;}
-    .nav-button {
-      width: 150px;
-      height: 40px;
-      background: none;
-      margin: 0.5px;
-      padding: 0px 0px;
-      font-size: 16px;
-      font-weight: 500;
-      color: #ffffff;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border-bottom: 1.5px solid rgba(0, 38, 77, 0.8);
-      border-radius: 0 0 5% 5%;
-    }
-    .nav-button:hover {
-      background: rgba(255,255,255,0.15);
-      border-bottom-color: #a8e6cf;
-      color: #a8e6cf;
-    }
-    .dropdown {
-      position: absolute;
-      top: 100%; left: 0;
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(10px);
-      min-width: 200px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-      opacity: 0; visibility: hidden;
-      transform: translateY(-10px);
-      transition: all 0.3s ease;
-      border-radius: 0 0 8px 8px;
-      border: 1px solid rgba(255,255,255,0.5);
-      z-index: 1001;
-    }
-    .nav-item:hover .dropdown {
-      opacity: 1; visibility: visible; transform: translateY(0);
-    }
-    .dropdown a {
-      display: block;
-      padding: 12px 20px;
-      color: #ffffff;
-      text-decoration: none;
-      transition: background 0.3s ease;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-      border-radius: 0 0 5% 5%;
-    }
-    .dropdown a:last-child {
-      border-bottom: none;
-      border-radius: 0 0 8px 8px;
-    }
-    .dropdown a:hover {
-      background: rgba(255,255,255,0.2);
-      color: #a8e6cf;
-      padding-left: 25px;
-    }
-
-    /* Left Sidebar */
-    .sidebar {
-      position: fixed;
-      left: 0; top: 55px; bottom: 47px;
-      width: 250px;
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      border-right: 1px solid rgba(255,255,255,0.2);
-      z-index: 1000;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.07);
-      display: flex; flex-direction: column;
-      overflow: hidden;
-      /* Footer overlaps, so no padding-bottom for footer! */
-    }
-    .sidebar-header {
-      padding: 12px;
-      background: rgba(255,255,255,0.05);
-      color: white;
-      font-size: 20px;
-      font-weight: bold;
-      text-align: center;
-      border-bottom: 1px solid rgba(0, 38, 77, 0.8);
-      border-radius: 0 0 1% 1%;
-      flex: none;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-    .sidebar-menu {
-      list-style: none;
-      padding: 0; margin: 0;
-      overflow-y: auto;
-      flex: 1 1 auto;
-    }
-    /* Sidebar submenu styling -- keep as original */
-    .sidebar-menu-item { border-bottom: 1px solid rgba(0, 38, 77, 0.8);}
-    .sidebar-button {
-      width: 100%; background: none; border: none;
-      padding: 15px 20px; color: #fff;
-      text-align: left; cursor: pointer;
-      transition: background 0.3s; font-size: 16px;
-      display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 1px solid rgba(0, 38, 77, 0.9);
-    }
-    .sidebar-button:hover { background: rgba(255,255,255,0.15);}
-    .sidebar-button.active { background: rgba(255,255,255,0.2); color: #a8e6cf;}
-    .sidebar-arrow { transition: transform 0.3s ease; font-size: 12px; }
-    .sidebar-arrow.rotated { transform: rotate(90deg);}
-    .sidebar-submenu {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
-      background: rgba(0,0,0,0.2);
-    }
-    .sidebar-submenu.open { max-height: 300px; }
-    .sidebar-submenu a {
-      display: block;
-      padding: 12px 20px 12px 40px;
-      color: #e0e0e0;
-      text-decoration: none;
-      transition: all 0.3s;
-      font-size: 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    .sidebar-submenu a:last-child { border-bottom: none;}
-    .sidebar-submenu a:hover {
-      background: rgba(255,255,255,0.1);
-      color: #a8e6cf;
-      padding-left: 45px;
-    }
-
-    /* Right Sidebar */
-    .right-sidebar {
-      position: fixed;
-      right: 0; top: 55px; bottom: 47px;
-      width: 300px;
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      border-left: 1px solid rgba(255,255,255,0.2);
-      z-index: 1000;
-      box-shadow: -2px 0 10px rgba(0,0,0,0.07);
-      display: flex; flex-direction: column;
-      overflow: hidden;
-      /* Footer overlaps, so no padding-bottom! */
-    }
-    .right-sidebar-fixed-header {
-      position: sticky;
-      top: 0;
-      background: rgba(255,255,255,0.1);
-      z-index: 10;
-      padding: 10px;
-      flex: none;
-    }
-    .right-sidebar-header {
-      color: white; font-size: 20px; font-weight: bold; margin-bottom: 10px; text-align: center; padding-bottom: 5px; border-bottom: 2px solid rgba(255,255,255,0.3);
-    }
-    .search-container { margin-bottom: 0;}
-    .search-input {
-      width: 100%;
-      padding: 10px 15px;
-      background: rgba(255,255,255,0.1);
-      border: 2px solid rgba(255,255,255,0.3);
-      border-radius: 10px;
-      color: white;
-      font-size: 14px;
-      outline: none;
-      transition: all 0.3s;
-    }
-    .search-input::placeholder { color: rgba(255,255,255,0.7);}
-    .search-input:focus {
-      background: rgba(255,255,255,0.25);
-      border-color: #a8e6cf;
-    }
-    .menu-list {
-      list-style: none;
-      padding: 8px;
-      margin: 0;
-      overflow-y: auto;
-      flex: 1 1 auto;
-    }
-    .menu-item {
-      padding: 9px 15px;
-      background: rgba(255,255,255,0.12);
-      margin-bottom: 5px;
-      border-radius: 8px;
-      color: white;
-      cursor: pointer;
-      transition: all 0.3s;
-      border-bottom: 2px solid rgba(0,0,0,0.9);
-    }
-    .menu-item:hover {
-      background: rgba(255,255,255,0.2);
-      transform: translateX(-5px);
-      color: #a8e6cf;
-    }
-
-    /* Main Content */
-    .main-content {
-      margin-top: 80px;
-      padding: 40px 20px 180px 20px;
-      margin-left: 250px;
-      margin-right: 280px;
-      min-height: 400px;
-    }
-    .main-content.shifted { transform: translateY(200px); }
-    .content-card {
-      max-width: 800px;
-      margin: 0 auto;
-      background: rgba(255,255,255,0.1);
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-    }
-    .page-heading {
-      font-size: 32px;
-      color: #ddd;
-      margin: 0 0 10px 0;
-      text-align: center;
-      font-weight: 700;
-    }
-    .welcome-text {
-      font-size: 18px;
-      color: #ddd;
-      text-align: center;
-      line-height: 1.6;
-      margin-bottom: 30px;
-    }
-    
-    /* Main Content task table */
-    
-    h2 {
-      color: #00e673;
-      text-align: center;
-      border-bottom: 1px solid #000;
-      padding-bottom: 5px;
-      margin-bottom: 0.5rem;
-    }
-    table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0px;
-      background-color: #lelele;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
-    th, td {
-      color: #00e673;
-      padding: 12px 15px;
-      text-align: left;
-      border-bottom: 0.1px solid #333;
-      border-spacing: 0;
-    }
-    thead th {
-      background-color: ;
-      color: #121212;
-      font-weight: bold;
-      border-spacing: 1px;
-    }
-   
-    tbody tr:hover {
-      background-color: #333;
-    }
-    /* Neon border highlight for today's row */
-    .today-row {
-      border: 1px solid #ff69b4;
-      box-shadow: 0 0 5px #ff69b4, 0 0 5px #00bfff, 0 0 1px #32cd32;
-      animation: pulse 3.5s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 5px #ff69b4, 0 0 5px #00bfff, 0 0 1px #32cd32; }
-      50% { box-shadow: 0 0 2px #ff0000, 0 0 2px #ff0000, 0 0 1px #32cd32; }
-    }
-
-    /* Footer */
-    .footer {
-      position: fixed;
-      left: 0; right: 0; bottom: 0;
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      border-top: 2px solid rgba(255,255,255,0.2);
-      padding: 10px;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.12);
-      z-index: 1100;
-      min-height: 40px;
-      display: flex; align-items: center;
-    }
-    .footer-content { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 15px;}
-    .social-media { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;}
-    .social-button {
-      width: 25px; height: 25px; border-radius: 50%; border: none; cursor: pointer; display: flex;
-      align-items: center; justify-content: center; font-size: 20px; color: white; text-decoration: none;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .social-button:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.18);}
-    .social-facebook { background: #1877f2;}
-    .social-twitter { background: #1da1f2;}
-    .social-youtube { background: #ff0000;}
-    .social-instagram { background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);}
-    .social-linkedin { background: #0077b5;}
-    
-
-    @media (max-width: 1024px) {
-      .sidebar { width: 220px;}
-      .right-sidebar { width: 250px;}
-      .main-content { margin-left: 220px; margin-right: 250px;}
-      .nav-button { padding: 18px 25px; font-size: 15px;}
-    }
-    @media (max-width: 768px) {
-      .sidebar { width: 200px;}
-      .right-sidebar { width: 200px;}
-      .main-content { margin-left: 200px; margin-right: 200px;}
-    }
-    @media (max-width: 480px) {
-      .sidebar, .right-sidebar { width: 140px;}
-      .main-content { margin-left: 140px; margin-right: 140px;}
-      .sidebar-header, .right-sidebar-header { font-size: 14px; padding: 12px;}
-      .sidebar-button, .menu-item { font-size: 13px;}
-      .content-card { padding: 18px 6px;}
-      .page-heading { font-size: 22px;}
-    }
-    
-    @media (max-width: 880px) {
-  .top-nav .nav-container {
-    flex-direction: column;
-    align-items: stretch;
-    height: auto;
-  }
-  .nav-item {
-    width: 100%;
-  }
-  .nav-button { width: 100%; font-size: 15px; }
-  .dropdown {
-    left: 0;
-    min-width: 100vw;
-    border-radius: 0 0 10px 10px;
-    box-shadow: none;
-  }
-  .sidebar, .right-sidebar {
-    position: static;
-    width: 100vw;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pro Dashboard</title>
+<style>
+/* Basic resets */
+* {
     margin: 0;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
-    flex-direction: row;
-    flex-wrap: wrap;
-    max-height: none;
-  }
-  .main-content {
-    margin-left: 0;
-    margin-right: 0;
-    padding: 10px 5px 120px 5px;
-  }
-  .content-card {
-    max-width: 99vw;
-    padding: 16px 2vw;
-  }
-}
-@media (max-width: 600px) {
-  .top-nav, .sidebar, .right-sidebar {
-    font-size: 13px;
-  }
-  .nav-button {
-    font-size: 13px;
-    height: auto;
-    padding: 8px;
-  }
-  .dropdown a {
-    padding: 8px 10px;
-    font-size: 13px;
-  }
-  .main-content {
-    margin-top: 60px;
-    min-height: 200px;
-    padding: 6px 2vw 100px 2vw;
-  }
-  .content-card {
-    max-width: 98vw;
-    padding: 8px 2vw;
-  }
-  .footer {
-    padding: 7px;
-  }
-  table, th, td {
-    font-size: 12px;
-    padding: 7px;
-  }
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", system-ui, sans-serif;
 }
 
-  </style>
+body {
+    background: linear-gradient(135deg, #1a4d2e 0%, #2d5016 50%, #1f3a1f 100%);
+    color: #e0e0e0;
+}
+
+/* Header */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    padding: 0 20px;
+    background: none;
+    backdrop-filter: blur(12px);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.9);
+    position: relative;
+    z-index: 10;
+}
+
+#sidebarToggleBtn {
+    font-size: 22px;
+    color: #00ff7f;
+    cursor: pointer;
+    margin-right: 12px;
+    display: none;
+}
+
+/* BRAND CONTAINER */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* BRAND TEXT */
+.brand-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #e0e0e0;
+    white-space: nowrap;
+    letter-spacing: 1px;
+}
+
+/* LOGO CIRCLE */
+.logo-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid #00ff7f;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    color: #00ff7f;
+    font-family: Arial, sans-serif;
+}
+
+.brand:hover .logo-circle{
+    box-shadow: 0 0 14px rgba(0,255,127,0.7);
+    transform: scale(1.05);
+}
+
+.logo-circle{
+    transition: all 0.25s ease;
+}
+
+
+
+/* LOGO TEXT */
+.logo-text {
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* KD */
+.logo-text.top {
+    font-size: 15px;
+    margin-bottom: 2px;
+}
+
+/* DIVIDER LINE */
+.logo-divider {
+    width: 70%;
+    height: 1.5px;
+    background: #00ff7f;
+    margin: 2px 0;
+}
+
+/* SITE */
+.logo-text.bottom {
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+#dateClock {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    font-size: 13px;
+    color: #e0e0e0;
+}
+
+#dateClock span {
+    line-height: 1.2;
+}
+
+/* Container */
+.container {
+    display: flex;
+    height: calc(100vh - 60px);
+}
+
+/* Sidebar */
+.sidebar {
+    width: 230px;
+    padding: 8px;
+    background: none;
+    backdrop-filter: blur(96px);
+    border-right: 1px solid rgba(0,0,0,0.9);
+    transition: transform 0.3s ease;
+    z-index: 2;
+    overflow-y: auto;
+    border-radius: 0 16px 16px 0;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(100,100,100,0.4);
+    border-radius: 3px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar li, .sidebar .drop-btn {
+    font-size: 14px;
+    color: #e0e0e0;
+}
+
+.sidebar li.home-btn {
+    font-weight: 600;
+    padding: 10px 14px;
+    color: #000;
+    border-radius: 12px;
+    margin-bottom: 4px;
+    background: rgba(255,255,255,0.9);
+    cursor: pointer;
+}
+
+.sidebar li.home-btn:hover {
+    background: rgba(0,0,0,0.9);
+    color: #fff;
+}
+
+/* Dropdown styling */
+.sidebar .dropdown {
+    margin-bottom: 4px;
+}
+
+.sidebar .drop-btn {
+    padding: 8px 14px;
+    border-radius: 12px;
+    margin-bottom: 2px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.1);
+    border-bottom: 2px solid rgba(0,0,0,0.9);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.3s;
+}
+
+
+/* RIGHT ALIGNED ARROW */
+.drop-btn::after {
+    content: "▶";
+    margin-left: auto;
+    transition: transform 0.25s ease;
+    font-size: 10px;
+    opacity: 0.8;
+}
+
+/* ROTATE WHEN OPEN */
+.dropdown.open > .drop-btn::after {
+    transform: rotate(90deg);
+}
+
+
+.sidebar .drop-btn:hover {
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 0 4px 1px #00ff7f, 0 1px 1px rgba(0,255,0,0.2);
+}
+
+.sidebar .dropdown.open > .drop-btn {
+    background: rgba(0,255,127,0.1);
+}
+
+.sidebar .drop-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    margin-left: 8px;
+}
+
+.sidebar .dropdown.open .drop-content {
+    max-height: 500px;
+}
+
+.sidebar .drop-content li {
+    font-size: 13.5px;
+    background: rgba(0,255,127,0.05);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin-bottom: 4px;
+    transition: 0.3s;
+}
+
+.sidebar .drop-content li:hover {
+    background: rgba(0,255,127,0.12);
+}
+
+/* ---------- HOME CARD TEXT ---------- */
+
+.site-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #00e673;
+    margin-bottom: 8px;
+}
+
+.site-desc {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+/* ---------- SECTION INSIDE HOME CARD ---------- */
+
+.home-section {
+    margin-top: 10px;
+    background: rgba(255,255,255,0.07);
+    padding: 16px;
+    border-radius: 12px;
+}
+
+.home-section h3 {
+    text-align: center;
+    color: #00ff9c;
+    margin-bottom: 12px;
+    font-size: 17px;
+}
+/* ---------- TASK TABLE (Improved Alignment) ---------- */
+
+.task-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    table-layout: fixed;
+}
+
+/* TABLE HEADER */
+.task-table thead th {
+    background: rgba(0,0,0,0.45);
+    padding: 10px 12px;
+    color: #9cffd1;
+    font-weight: 600;
+    text-align: left;
+    border-bottom: 2px solid rgba(0,255,127,0.35);
+}
+
+/* TABLE BODY */
+.task-table tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    color: #eaffea;
+    vertical-align: middle;
+}
+
+/* ROW HOVER */
+.task-table tbody tr:hover {
+    background: rgba(0,255,127,0.08);
+}
+
+/* ---------- NOTICE BAR ---------- */
+
+.notice-bar {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    background: #000;
+    border-radius: 6px;
+    padding: 6px 10px;
+    overflow: hidden;
+}
+
+.notice-label {
+    color: #00aaff;
+    font-weight: bold;
+    margin-right: 12px;
+    white-space: nowrap;
+}
+
+.notice-track {
+    flex: 1;
+    overflow: hidden;
+}
+
+#noticeText {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scrollNotice 18s linear infinite;
+    color: #ffffff;
+}
+
+@keyframes scrollNotice {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* Main content */
+.main {
+    flex: 1;
+    padding: 12px;
+    background-color:none;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 16px;
+    background: #0a0a0a;
+    box-shadow: 0 16px 48px rgba(0,255,0,0.1);
+    transition: box-shadow 0.3s;
+}
+
+/* ===============================
+   RIGHT SIDEBAR HAMBURGER
+================================ */
+
+#rightSidebarToggle {
+    font-size: 20px;
+    color: #00ff7f;
+    cursor: pointer;
+    display: none;
+    margin-left: 10px;
+}
+
+/* Default (desktop) */
+.right-sidebar {
+    width: 260px;
+    flex-shrink: 0;
+}
+
+/* ---------- MOBILE VIEW ---------- */
+@media (max-width: 900px) {
+
+    #rightSidebarToggle {
+        display: block;
+    }
+
+    .right-sidebar {
+        position: fixed;
+        top: 60px; /* header height */
+        right: -280px;
+        width: 260px;
+        height: calc(100vh - 60px);
+        background: rgba(0,0,0,0.97);
+        transition: right 0.3s ease;
+        z-index: 999;
+        box-shadow: -6px 0 20px rgba(0,0,0,0.6);
+    }
+
+    .right-sidebar.active {
+        right: 0;
+    }
+}
+
+
+
+/* Search Panel */
+.search-panel {
+    width: 260px;
+    padding: 8px;
+    background: none;
+    backdrop-filter: blur(16px);
+    border-left: 1px solid rgba(0,0,0,0.9);
+    overflow: hidden;
+    border-radius: 16px 0 0 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-panel input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.9);
+    color: rgba(223,223,223,0.9);
+    margin-bottom: 8px;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.search-panel input:focus {
+    background: rgba(255,255,255,0.08);
+    box-shadow: 0 0 8px #00ff7f,0 4px 8px rgba(0,255,0,0.15);
+}
+
+.search-list-container {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.search-list li {
+    list-style: none;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    border-radius: 12px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.12);
+    border-bottom: 2px solid rgba(0,0,0,0.9);
+    color: rgba(0, 0, 0, 0.9);
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    transition: 0.3s;
+}
+
+.search-list li:hover {
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 0 4px 1px #00ff7f, 0 4px 8px rgba(0,255,0,0.2);
+}
+
+.search-panel .search-list li a {
+    color: #e0e0e0 !important;
+    text-decoration: none !important;
+    font-size: 14px;
+    font-weight: 400;
+    display: block;
+    flex: 1;
+}
+
+.favorite-btn {
+    cursor: pointer;
+    margin-left: 8px;
+    color: rgba(200,200,200,0.6);
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.favorite-btn.active {
+    color: #00ff7f;
+}
+
+.favorite-btn:hover {
+    color: #00ff7f;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 4px;
+    flex-wrap: wrap;
+}
+
+.pagination button {
+    background: none;
+    border: none;
+    color: #bdbdbd;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Pagination page seprator */
+
+.pagination button::after {
+    content: "|";
+    margin-left: 10px;
+    color: #444;
+}
+
+.pagination button:last-of-type::after {
+    content: "";
+}
+
+/* Pagination active page */
+.pagination button.active {
+    background-color: #00ff7f;
+    color: #000;
+    font-weight: 600;
+}
+
+.pagination button:hover {
+    background: rgba(0,255,127,0.15);
+}
+/* =========================================
+   MOBILE LAYOUT FIX – MAIN CONTENT ALWAYS VISIBLE
+   ADD THIS AT THE END OF YOUR CSS FILE
+========================================= */
+
+@media (max-width: 992px) {
+
+    /* Container should not squeeze main content */
+    .container {
+        display: block;
+    }
+
+    /* Main content must always stay visible */
+    .main {
+        width: 100%;
+        min-width: 100%;
+        flex: none;
+        padding: 14px;
+    }
+
+    /* Prevent iframe / cards from collapsing */
+    .main iframe,
+    .main .home-card,
+    .main .task-table {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    /* Left sidebar overlay (already exists, just reinforcing) */
+    .sidebar {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        height: calc(100vh - 60px);
+        transform: translateX(-100%);
+        z-index: 900;
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    /* Right sidebar overlay (already exists) */
+    .right-sidebar {
+        position: fixed;
+        top: 60px;
+        right: -280px;
+        height: calc(100vh - 60px);
+        z-index: 950;
+    }
+
+    .right-sidebar.active {
+        right: 0;
+    }
+}
+
+@media (max-width: 992px) {
+    #sidebarToggleBtn {
+        display: block;
+    }
+}
+
+
+</style>
 </head>
 <body>
-  <!-- Left Sidebar -->
-  <nav class="sidebar" id="sidebar">
-    <div class="sidebar-header">Menu</div>
-    <ul class="sidebar-menu">
-      <li class="sidebar-menu-item"><button class="sidebar-button" data-menu="dashboard"> <span>Dashboard</span> <span class="sidebar-arrow">▶</span> </button>
-        <div class="sidebar-submenu"><a href="#overview">Overview</a><a href="#analytics">Analytics</a><a href="#reports">Reports</a><a href="#statistics">Statistics</a><a href="#insights">Insights</a></div>
-      </li>
-      <li class="sidebar-menu-item"><button class="sidebar-button" data-menu="messages"> <span>Messages</span> <span class="sidebar-arrow">▶</span> </button>
-        <div class="sidebar-submenu"><a href="#inbox">Inbox</a><a href="#sent">Sent</a><a href="#drafts">Drafts</a><a href="#archived">Archived</a><a href="#spam">Spam</a></div>
-      </li>
-      <li class="sidebar-menu-item"><button class="sidebar-button" data-menu="contacts"> <span>Contacts</span> <span class="sidebar-arrow">▶</span> </button>
-        <div class="sidebar-submenu"><a href="#all-contacts">All Contacts</a><a href="#favorites">Favorites</a><a href="#groups">Groups</a><a href="#recent">Recent</a><a href="#blocked">Blocked</a></div>
-      </li>
-      <li class="sidebar-menu-item"><button class="sidebar-button" data-menu="settings"> <span>Settings</span> <span class="sidebar-arrow">▶</span> </button>
-        <div class="sidebar-submenu"><a href="#account">Account</a><a href="#privacy">Privacy</a><a href="#notifications">Notifications</a><a href="#appearance">Appearance</a><a href="#security">Security</a></div>
-      </li>
-      <li class="sidebar-menu-item"><button class="sidebar-button" data-menu="profile"> <span>Profile</span> <span class="sidebar-arrow">▶</span> </button>
-        <div class="sidebar-submenu">
-        <a href="#" onclick="loadPage('https://script.google.com/macros/s/AKfycbwtqel85Y8GFEa3rnQidIsTCrC3vBfTRYczth9xJCCkfbVoTs9c-awQcmuUlc3rMTaQyg/exec')">Attendance</a>
-        <a href="#preferences">Preferences</a>
-        <a href="#activity">Activity</a>
-        <a href="#achievements">Achievements</a>
-        <a href="#history">History</a></div>
-      </li>
-    </ul>
-  </nav>
-  
-  <!-- Top Nav -->
-<nav class="top-nav">
-  <div class="nav-container">
 
-    <!-- HOME BUTTON WITHOUT DROPDOWN -->
-    <div class="nav-item">
-       <button class="nav-button" onclick="window.location.href='https://kdiste.netlify.app'">🏛️ Home</button>
+<header>
+    <div id="sidebarToggleBtn">&#9776;</div>
+
+    <div class="brand" onclick="openInIframe('https://example.com')">
+        <!-- LOGO -->
+        <div class="logo-circle">
+            <div class="logo-text top">KD</div>
+            <div class="logo-divider"></div>
+            <div class="logo-text bottom">SITE</div>
+        </div>
+
+        <!-- BRAND NAME -->
+        <div class="brand-text">
+            KD-SITE
+        </div>
     </div>
 
-    <!-- COMMUNICATION DROPDOWN -->
-    <div class="nav-item">
-      <button class="nav-button">Communication</button>
-      <div class="dropdown">
-        <a href="#messages">Messages</a>
-        <a href="#chat">Chat</a>
-        <a href="#video-call">Video Call</a>
-        <a href="#voice-call">Voice Call</a>
-        <a href="#email">Email</a>
-      </div>
+    <div id="dateClock">
+        <span id="time">--:--:--</span>
+        <span id="date">--/--/----</span>
+    </div>
+    
+    <div id="rightSidebarToggle" title="Quick Access">&#9776;</div>
+    
+</header>
+
+
+<div class="container">
+
+<!-- Sidebar -->
+<nav class="sidebar">
+<ul>
+<li class="home-btn" onclick="openHome()">Home</li>
+
+<li class="dropdown">
+<div class="drop-btn">Dashboard</div>
+<ul class="drop-content">
+<li>
+  <a href="#" onclick="openInIframe('https://script.google.com/macros/s/AKfycbw-vhMJUSCaEQzd3Ly23zm-54I8f9BocvaLb_vuPjV10T-6svx78SWqxD5_tYaqhdvaUg/exec')">
+    Item 1
+  </a>
+</li>
+<li><a href="https://example.com" target="contentFrame">Item 2</a></li>
+<li><a href="https://example.com" target="contentFrame">Item 3</a></li>
+<li><a href="https://example.com" target="contentFrame">Item 4</a></li>
+<li><a href="https://example.com" target="contentFrame">Item 5</a></li>
+</ul>
+</li>
+
+<li class="dropdown">
+<div class="drop-btn">Management</div>
+<ul class="drop-content">
+<li><a href="https://example.com" target="contentFrame">Item 1</a></li>
+<li><a href="https://example.com" target="contentFrame">Item 2</a></li>
+<li><a href="https://example.com" target="contentFrame">Item 3</a></li>
+<li><a href="https://example.com" target="contentFrame">Item 4</a></li>
+<li><a href="https://example.com" target="contentFrame">Item 5</a></li>
+</ul>
+</li>
+
+
+<li class="dropdown">
+<div class="drop-btn">Section</div>
+<ul class="drop-content">
+<li><a href="https://example.com" target="contentFrame">Item 1</a></li>
+<li><a href="https://example.com" target="contentFrame">Item 2</a></li>
+<li><a href="https://example.com" target="contentFrame">Item 3</a></li>
+<li><a href="https://example.com" target="contentFrame">Item 4</a></li>
+<li><a href="https://example.com" target="contentFrame">Item 5</a></li>
+</ul>
+</li>
+
+</ul>
+</nav>
+
+<!-- Main Content -->
+<main class="main">
+
+  <!-- HOME CARD -->
+  <div id="homeCard" class="home-card">
+
+    <h2>Welcome to...</h2>
+
+    <p class="site-title">
+      KD-SITE (Know Data of Signal Interlocking & Telecom Equipment)
+    </p>
+
+    <p class="site-desc">
+      An online dashboard where you can manage all your assets data, reports,
+      plans, tasks, and other operational information efficiently from one place.
+    </p>
+
+    <!-- UPCOMING TASKS -->
+    <div class="home-section">
+      <h3>Upcoming Important Tasks</h3>
+
+      <table class="task-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Task For</th>
+            <th>Task Details</th>
+          </tr>
+        </thead>
+        <tbody id="taskBody">
+          <tr>
+            <td colspan="3">Loading tasks...</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-    <div class="nav-item">
-      <button class="nav-button">Contacts</button>
-      <div class="dropdown">
-        <a href="#all-contacts">All Contacts</a>
-        <a href="#favorites">Favorites</a>
-        <a href="#groups">Groups</a>
-        <a href="#recent">Recent</a>
-        <a href="#blocked">Blocked</a>
-      </div>
-    </div>
-
-    <div class="nav-item">
-      <button class="nav-button">Settings</button>
-      <div class="dropdown">
-        <a href="#account">Account</a>
-        <a href="#privacy">Privacy</a>
-        <a href="#notifications">Notifications</a>
-        <a href="#appearance">Appearance</a>
-        <a href="#security">Security</a>
-      </div>
-    </div>
-
-    <div class="nav-item">
-      <button class="nav-button">Media</button>
-      <div class="dropdown">
-        <a href="#photos">Photos</a>
-        <a href="#videos">Videos</a>
-        <a href="#documents">Documents</a>
-        <a href="#audio">Audio</a>
-        <a href="#links">Links</a>
-      </div>
-    </div>
-
-    <div class="nav-item">
-      <button class="nav-button">Help</button>
-      <div class="dropdown">
-        <a href="#faq">FAQ</a>
-        <a href="#support">Support</a>
-        <a href="#tutorials">Tutorials</a>
-        <a href="#feedback">Feedback</a>
-        <a href="#about">About</a>
+    <!-- NOTICE (INSIDE CARD – BOTTOM) -->
+    <div class="notice-bar">
+      <span class="notice-label">NOTICE</span>
+      <div class="notice-track">
+        <span id="noticeText">Loading notice...</span>
       </div>
     </div>
 
   </div>
-</nav>
 
-  
-  <!-- Right Sidebar -->
-  <aside class="right-sidebar">
-    <div class="right-sidebar-fixed-header">
-      <div class="right-sidebar-header">Quick Access</div>
-      <div class="search-container"><input type="text" id="searchInput" class="search-input" placeholder="Search items..."></div>
-    </div>
-    <ul class="menu-list" id="menuList">
-      <li class="menu-item">Account Settings</li>
-      <li class="menu-item">Activity Log</li>
-      <li class="menu-item">Analytics Dashboard</li>
-      <li class="menu-item">Appearance</li>
-      <li class="menu-item">Archived Messages</li>
-      <li class="menu-item">Blocked Contacts</li>
-      <li class="menu-item">Chat History</li>
-      <li class="menu-item">Contact Groups</li>
-      <li class="menu-item">Dashboard Overview</li>
-      <li class="menu-item">Data Export</li>
-      <li class="menu-item">Email Settings</li>
-      <li class="menu-item">Favorite Contacts</li>
-      <li class="menu-item">File Manager</li>
-      <li class="menu-item">Help Center</li>
-      <li class="menu-item">Inbox</li>
-      <li class="menu-item">Language Settings</li>
-      <li class="menu-item">Media Gallery</li>
-      <li class="menu-item">Notifications</li>
-      <li class="menu-item">Privacy Settings</li>
-      <li class="menu-item">Profile Information</li>
-      <li class="menu-item">Recent Activity</li>
-      <li class="menu-item">Reports</li>
-      <li class="menu-item">Security Settings</li>
-      <li class="menu-item">Sent Messages</li>
-      <li class="menu-item">Statistics</li>
-      <li class="menu-item">Support Tickets</li>
-      <li class="menu-item">Theme Customization</li>
-      <li class="menu-item">User Preferences</li>
-      <li class="menu-item">Video Calls</li>
-      <li class="menu-item">Voice Messages</li>
-    </ul>
-  </aside>
-  <!-- Main Content -->
-  <main class="main-content" id="mainContent">
-  <!-- Dynamic Loader -->
-      <iframe id="contentFrame" src="" style="
-        width:100%;
-        height:80vh;
-        border:none;
-        border-radius: 12px;
-        background: rgba(255,255,255,0.05);
-        display: none;
-      "></iframe>
-    <div class="content-card">
-      <h1 class="page-heading" id="pageHeading">Personal Communication Control</h1>
-      <p class="welcome-text" id="welcomeText">Welcome to your personal communication hub. Manage all your conversations, contacts, and settings in one place.</p>
-      <!-- TASK SECTION -->
-      <div class="task-card">
-        <h2>Upcoming Important Tasks</h2>
-        <table>
-          <thead>
-            <tr><th>Date</th><th>Task For</th><th>Task Details</th></tr>
-          </thead>
-          <tbody id="taskBody"><tr><td colspan="3">Loading...</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-  </main>
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="social-media"><a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-button social-facebook" title="Facebook">f</a> <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="social-button social-twitter" title="Twitter">𝕏</a> <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="social-button social-youtube" title="YouTube">▶</a> <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-button social-instagram" title="Instagram">📷</a> <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-button social-linkedin" title="LinkedIn">in</a></div>
-      
-    </div>
-  </footer>
-  <script>
-    // Sidebar accordion functionality
-    const sidebarButtons = document.querySelectorAll('.sidebar-button');
-    sidebarButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const submenu = button.nextElementSibling;
-        const arrow = button.querySelector('.sidebar-arrow');
-        const isOpen = submenu.classList.contains('open');
-        document.querySelectorAll('.sidebar-submenu').forEach(menu => { menu.classList.remove('open'); });
-        document.querySelectorAll('.sidebar-arrow').forEach(arr => { arr.classList.remove('rotated'); });
-        document.querySelectorAll('.sidebar-button').forEach(btn => { btn.classList.remove('active'); });
-        if (!isOpen) {
-          submenu.classList.add('open');
-          arrow.classList.add('rotated');
-          button.classList.add('active');
-        }
-      });
-    });
-    
-    // Show page in main content area in same page
-    function loadPage(url) {
-    // Show iframe
-    const frame = document.getElementById('contentFrame');
-    frame.style.display = "block";
-    frame.src = url;
+  <!-- IFRAME -->
+  <iframe id="contentFrame" name="contentFrame" style="display:none;"></iframe>
 
-    // Hide home welcome section
-    document.querySelector('.content-card').style.display = "none";
+</main>
 
-    // Scroll to top
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+<!-- Search Panel -->
+<aside class="search-panel right-sidebar">
+<input type="text" id="searchInput" placeholder="Quick Access">
+<div class="search-list-container">
+<ul class="search-list" id="searchList">
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 1</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 2</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 3</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 4</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 5</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 6</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 7</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 8</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 9</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 10</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 11</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 12</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 13</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 14</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 15</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 16</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 17</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 18</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 19</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 20</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 21</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 22</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 23</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 24</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 25</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 26</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 27</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 28</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 29</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 30</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 31</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<li>
+    <a href="https://example.com" target="contentFrame">Item 32</a>
+    <span class="favorite-btn">&#9733;</span>
+</li>
+
+<!-- Add all 300 items manually -->
+</ul>
+</div>
+<div class="pagination" id="pagination">
+  <button id="prevBtn">Prev</button>
+
+  <button class="page-btn" data-page="1">1</button>
+  <button class="page-btn" data-page="2">2</button>
+  <button class="page-btn" data-page="3">3</button>
+
+  <span>...</span>
+
+  <button id="nextBtn">Next</button>
+  <button id="lastBtn">Last</button>
+</div>
+</aside>
+
+</div>
+
+<script>
+
+//Open initial dashboard on click Home button
+function openHome(){
+  const iframe = document.getElementById('contentFrame');
+  const homeCard = document.getElementById('homeCard');
+
+  iframe.style.display = "none";
+  iframe.src = "";
+  homeCard.style.display = "block";
 }
-    
-    
-    // Shift main content when nav hovered
-    const navItems = document.querySelectorAll('.nav-item');
-    const mainContent = document.getElementById('mainContent');
-    navItems.forEach(item => {
-      item.addEventListener('mouseenter', () => { mainContent.classList.add('shifted'); });
-      item.addEventListener('mouseleave', () => { mainContent.classList.remove('shifted'); });
+
+/* ===============================
+   GOOGLE SHEET LINK
+================================ */
+
+const TASK_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTplfPtMJkKImLY81ARasHR5_oCARDV21n5E7UG7gVQYeZ87WALi07ML4V3JBYbGZ7CN0C0TGEdQ2n_/pub?output=csv';
+
+
+
+/* ===============================
+   SAFE DATE PARSER (MM/DD/YYYY)
+================================ */
+function parseMMDDYYYY(dateStr) {
+  if (!dateStr) return null;
+
+  const parts = dateStr.trim().split("/");
+  if (parts.length !== 3) return null;
+
+  const month = parseInt(parts[0], 10) - 1; // 0 based
+  const day   = parseInt(parts[1], 10);
+  const year  = parseInt(parts[2], 10);
+
+  return new Date(year, month, day);
+}
+
+/* ===============================
+   CSV PARSER
+================================ */
+function parseCSV(text) {
+  return text
+    .trim()
+    .split("\n")
+    .slice(1)
+    .map(r => r.split(","));
+}
+
+/* ===============================
+   LOAD + FILTER TASKS
+================================ */
+async function loadTasks() {
+  try {
+    const res = await fetch(TASK_CSV_URL);
+    const text = await res.text();
+    const rows = parseCSV(text);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const validTasks = rows
+      .map(r => ({
+        raw: r,
+        date: parseMMDDYYYY(r[0])
+      }))
+      .filter(t =>
+        t.date &&
+        t.date >= today   // today + upcoming
+      )
+      .sort((a, b) => a.date - b.date)
+      .slice(0, 3);       // max 3 only
+
+    const tbody = document.getElementById("taskBody");
+    tbody.innerHTML = "";
+
+    if (validTasks.length === 0) {
+      tbody.innerHTML =
+        "<tr><td colspan='3'>No upcoming tasks</td></tr>";
+      return;
+    }
+
+    validTasks.forEach(t => {
+      const r = t.raw;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${r[0]}</td>
+        <td>${r[1] || "-"}</td>
+        <td>${r[2] || "-"}</td>
+      `;
+      tbody.appendChild(tr);
     });
-    
-    // Apni Google Sheets ka publish as csv wala link yahan dalein:
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTplfPtMJkKImLY81ARasHR5_oCARDV21n5E7UG7gVQYeZ87WALi07ML4V3JBYbGZ7CN0C0TGEdQ2n_/pub?output=csv';
 
-    // CSV parsing with support for quoted fields
-    function parseCSV(text) {
-      const lines = text.trim().split(/\r?\n/);
-      return lines.map(line => {
-        const regex = /("([^"]|"")*"|[^,]+|)(?=,|$)/g;
-        return [...line.matchAll(regex)].map(match => {
-          let val = match[1] || "";
-          val = val.replace(/^"|"$/g, "").replace(/""/g, '"');
-          return val.trim();
-        }).filter(Boolean);
-      });
-    }
+  } catch (e) {
+    document.getElementById("taskBody").innerHTML =
+      "<tr><td colspan='3'>Unable to load tasks</td></tr>";
+  }
+}
 
-    function isValidDate(d) {
-      return d instanceof Date && !isNaN(d.valueOf());
-    }
+loadTasks();
 
-    async function loadTasks() {
-      try {
-        const response = await fetch(csvUrl);
-        const csvText = await response.text();
 
-        const rows = parseCSV(csvText);
-        const dataRows = rows.slice(1).filter(row => row.length >= 3 && row[0] && row[1] && row[2]);
+/* ===============================
+   NOTICE FETCH
+================================ */
 
-        const tasks = dataRows.map(row => {
-          return {
-            date: new Date(row[0]),
-            forWhom: row[1],
-            task: row[2]
-          };
-        }).filter(t => isValidDate(t.date));
+const NOTICE_API_URL = "https://script.google.com/macros/s/AKfycbxLtCQCHYo5taKOogeoC2jXVH98rEQZzRpbd9Ty_slc_XrhZt4_lBqZEp_EKVs-tTZOQg/exec";
 
-        tasks.sort((a, b) => a.date - b.date);
+let notices = [];
+let noticeIndex = 0;
 
-        // Select only 5 upcoming tasks
-        const upcomingTasks = tasks.slice(0, 3);
+function loadNotices() {
+  fetch(NOTICE_API_URL)
+    .then(res => res.json())
+    .then(data => {
+      notices = data.notice.split(/\r?\n/).filter(n => n.trim());
+      rotateNotice();
+    })
+    .catch(() => {
+      document.getElementById("noticeText").textContent =
+        "Unable to load notice";
+    });
+}
 
-        const tbody = document.getElementById('taskBody');
-        tbody.innerHTML = '';
+function rotateNotice() {
+  if (!notices.length) return;
+  document.getElementById("noticeText").textContent = notices[noticeIndex];
+  noticeIndex = (noticeIndex + 1) % notices.length;
+}
 
-        if (upcomingTasks.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="3">No upcoming tasks found.</td></tr>';
-          return;
+loadNotices();
+setInterval(rotateNotice, 15000);
+
+
+
+// Sidebar dropdown toggle with auto-collapse
+document.querySelectorAll('.sidebar .drop-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+        const parent = btn.parentElement;
+        if(parent.classList.contains('open')){
+            parent.classList.remove('open');
+        } else {
+            document.querySelectorAll('.sidebar .dropdown').forEach(d=>d.classList.remove('open'));
+            parent.classList.add('open');
         }
+    });
+});
 
-        const today = new Date();
-        today.setHours(0, 0, 0, 0); // Remove time part for comparison
+// Mobile sidebar toggle
+const sidebar = document.querySelector('.sidebar');
+const toggleBtn = document.getElementById('sidebarToggleBtn');
+toggleBtn.addEventListener('click', () => { sidebar.classList.toggle('show'); });
 
-        upcomingTasks.forEach(task => {
-          const tr = document.createElement('tr');
-          const taskDate = new Date(task.date);
-          taskDate.setHours(0, 0, 0, 0); // Remove time part for comparison
+// Iframe open
+function openInIframe(url){
+  const iframe = document.getElementById('contentFrame');
+  const homeCard = document.getElementById('homeCard');
 
-          if (taskDate.getTime() === today.getTime()) {
-            tr.classList.add('today-row');
-          }
+  homeCard.style.display = "none";
+  iframe.style.display = "block";
+  iframe.src = url;
+}
 
-          tr.innerHTML = `
-            <td>${task.date.toLocaleDateString()}</td>
-            <td>${task.forWhom}</td>
-            <td>${task.task}</td>
-          `;
-          tbody.appendChild(tr);
-        });
-      } catch (error) {
-        document.getElementById('taskBody').innerHTML = '<tr><td colspan="3">Error loading tasks.</td></tr>';
-        console.error('Error fetching or parsing data:', error);
-      }
+// Date & Time
+function updateDateTime() {
+    const now = new Date();
+
+    // ---- TIME (24 HOUR FORMAT WITH SECONDS) ----
+    const hours = String(now.getHours()).padStart(2, '0');   // 00–23
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    document.getElementById("time").textContent =
+        `${hours}:${minutes}:${seconds}`;
+
+    // ---- WEEKDAY ----
+    const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const dayName = weekdays[now.getDay()];
+
+    // ---- DATE ----
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+
+    document.getElementById("date").textContent =
+        `${dayName}, ${day}/${month}/${year}`;
+}
+
+// Initial call
+updateDateTime();
+
+// Update every second (for seconds)
+setInterval(updateDateTime, 1000);
+
+
+/* =================== Right sidebar toggle =================== */
+
+const rightToggle = document.getElementById("rightSidebarToggle");
+const rightSidebar = document.querySelector(".right-sidebar");
+
+rightToggle.addEventListener("click", () => {
+    rightSidebar.classList.toggle("active");
+});
+
+
+
+/* =================== Favorite Pin / Unpin with 3-click toggle =================== */
+
+const favoriteBtns = document.querySelectorAll('.favorite-btn');
+let savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+const clickCounts = {};
+const clickTimers = {};
+const CLICK_LIMIT = 3;
+const TIME_WINDOW = 5000; // 5 seconds
+
+function refreshPinnedList(){
+    const searchList = document.getElementById('searchList');
+    const pinnedItems = savedFavorites.map(favText=>{
+        return Array.from(searchList.children).find(li=>li.innerText.trim()===favText);
+    }).filter(Boolean);
+
+    pinnedItems.forEach(item=>{
+        searchList.insertBefore(item, searchList.firstChild);
+    });
+}
+
+favoriteBtns.forEach((btn)=>{
+    const li = btn.parentElement;
+    const key = li.innerText.trim();
+    clickCounts[key] = 0;
+
+    if(savedFavorites.includes(key)){
+        btn.classList.add('active');
     }
 
-    loadTasks();
-    
-  
-   
-    // Search functionality for right sidebar
-    const searchInput = document.getElementById('searchInput');
-    const menuList = document.getElementById('menuList');
-    const menuItems = Array.from(menuList.getElementsByClassName('menu-item'));
-    searchInput.addEventListener('input', function(e) {
-      const searchQuery = e.target.value.toLowerCase();
-      menuItems.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        item.style.display = text.includes(searchQuery) ? 'block' : 'none';
-      });
+    btn.addEventListener('click', ()=>{
+        clickCounts[key] += 1;
+
+        if(clickTimers[key]) clearTimeout(clickTimers[key]);
+        clickTimers[key] = setTimeout(()=>{
+            clickCounts[key] = 0;
+        }, TIME_WINDOW);
+
+        if(clickCounts[key] >= CLICK_LIMIT){
+            if(savedFavorites.includes(key)){
+                // UNPIN
+                savedFavorites = savedFavorites.filter(item => item !== key);
+                btn.classList.remove('active');
+            } else {
+                // PIN
+                savedFavorites.push(key);
+                btn.classList.add('active');
+            }
+
+            localStorage.setItem('favorites', JSON.stringify(savedFavorites));
+            refreshPinnedList();
+
+            clickCounts[key] = 0;
+            clearTimeout(clickTimers[key]);
+        }
     });
-  </script>
+});
+
+// Initial refresh of pinned items on load
+refreshPinnedList();
+
+/* =================== Pagination + Search + 15 items per page =================== */
+
+const searchInput = document.getElementById('searchInput');
+const searchList = document.getElementById('searchList');
+const paginationContainer = document.getElementById('pagination');
+
+let allItems = Array.from(searchList.children);
+let filteredItems = [...allItems];
+let itemsPerPage = 15;
+let currentPage = 1;
+
+function renderPage(page=1){
+    currentPage = page;
+
+    allItems.forEach(li => li.style.display = "none");
+
+    const start = (page-1)*itemsPerPage;
+    const end = start + itemsPerPage;
+
+    filteredItems.slice(start,end).forEach(li => li.style.display="flex");
+
+    renderPagination();
+}
+
+function renderPagination(){
+    paginationContainer.innerHTML = "";
+
+    const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+
+    const prevBtn = document.createElement('button');
+    prevBtn.innerText = "Prev";
+    prevBtn.disabled = currentPage===1;
+    prevBtn.addEventListener('click', ()=> renderPage(currentPage-1));
+    paginationContainer.appendChild(prevBtn);
+
+    const maxPageButtons = 3;
+    let startPage = Math.max(1, currentPage);
+    let endPage = Math.min(totalPages, currentPage+maxPageButtons-1);
+
+    if(startPage>1){
+        const firstBtn = document.createElement('button');
+        firstBtn.innerText = "1";
+        firstBtn.classList.toggle('active', currentPage===1);
+        firstBtn.addEventListener('click', ()=> renderPage(1));
+        paginationContainer.appendChild(firstBtn);
+        if(startPage>2){
+            const dots = document.createElement('span');
+            dots.innerText = "...";
+            paginationContainer.appendChild(dots);
+        }
+    }
+
+    for(let i=startPage; i<=endPage; i++){
+        const btn = document.createElement('button');
+        btn.innerText = i;
+        btn.classList.toggle('active', i===currentPage);
+        btn.addEventListener('click', ()=> renderPage(i));
+        paginationContainer.appendChild(btn);
+    }
+
+    if(endPage<totalPages){
+        if(endPage<totalPages-1){
+            const dots = document.createElement('span');
+            dots.innerText = "...";
+            paginationContainer.appendChild(dots);
+        }
+        const lastBtn = document.createElement('button');
+        lastBtn.innerText = totalPages;
+        lastBtn.classList.toggle('active', currentPage===totalPages);
+        lastBtn.addEventListener('click', ()=> renderPage(totalPages));
+        paginationContainer.appendChild(lastBtn);
+    }
+
+    const nextBtn = document.createElement('button');
+    nextBtn.innerText = "Next";
+    nextBtn.disabled = currentPage===totalPages || totalPages===0;
+    nextBtn.addEventListener('click', ()=> renderPage(currentPage+1));
+    paginationContainer.appendChild(nextBtn);
+}
+
+searchInput.addEventListener('input', function(){
+    const value = this.value.toLowerCase();
+    filteredItems = allItems.filter(li => li.innerText.toLowerCase().includes(value));
+    renderPage(1);
+});
+
+renderPage(1);
+
+</script>
+
+
+
 </body>
 </html>
-
-
