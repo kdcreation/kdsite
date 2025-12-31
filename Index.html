@@ -3,9 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pro Dashboard</title>
+<title>KD-SITE Dashboard</title>
 <style>
-/* Basic resets */
+/* =========================================================
+   1. GLOBAL RESET & BASE
+   ========================================================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -18,20 +21,24 @@ body {
     color: #e0e0e0;
 }
 
-/* Header */
+
+/* =========================================================
+   2. HEADER (TOP NAV BAR)
+   ========================================================= */
+
 header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: 60px;
     padding: 0 20px;
-    background: none;
     backdrop-filter: blur(12px);
     border-bottom: 2px solid rgba(0, 0, 0, 0.9);
     position: relative;
-    z-index: 10;
+    z-index: 1000;
 }
 
+/* Left Sidebar Toggle */
 #sidebarToggleBtn {
     font-size: 22px;
     color: #00ff7f;
@@ -40,7 +47,20 @@ header {
     display: none;
 }
 
-/* BRAND CONTAINER */
+/* Right Sidebar Toggle */
+#rightSidebarToggle {
+    font-size: 20px;
+    color: #00ff7f;
+    cursor: pointer;
+    display: none;
+    margin-left: 10px;
+}
+
+
+/* =========================================================
+   3. BRAND / LOGO
+   ========================================================= */
+
 .brand {
     display: flex;
     align-items: center;
@@ -49,7 +69,6 @@ header {
     flex-shrink: 0;
 }
 
-/* BRAND TEXT */
 .brand-text {
     font-size: 18px;
     font-weight: 600;
@@ -58,7 +77,7 @@ header {
     letter-spacing: 1px;
 }
 
-/* LOGO CIRCLE */
+/* Logo Circle */
 .logo-circle {
     width: 48px;
     height: 48px;
@@ -68,35 +87,24 @@ header {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-sizing: border-box;
     color: #00ff7f;
-    font-family: Arial, sans-serif;
+    transition: all 0.25s ease;
 }
 
-.brand:hover .logo-circle{
+.brand:hover .logo-circle {
     box-shadow: 0 0 14px rgba(0,255,127,0.7);
     transform: scale(1.05);
 }
 
-.logo-circle{
-    transition: all 0.25s ease;
-}
-
-
-
-/* LOGO TEXT */
 .logo-text {
     font-weight: 700;
     line-height: 1;
 }
 
-/* KD */
 .logo-text.top {
     font-size: 15px;
-    margin-bottom: 2px;
 }
 
-/* DIVIDER LINE */
 .logo-divider {
     width: 70%;
     height: 1.5px;
@@ -104,61 +112,67 @@ header {
     margin: 2px 0;
 }
 
-/* SITE */
 .logo-text.bottom {
     font-size: 10px;
     letter-spacing: 1px;
 }
+
+
+/* =========================================================
+   4. DATE & CLOCK
+   ========================================================= */
 
 #dateClock {
     display: flex;
     flex-direction: column;
     text-align: right;
     font-size: 13px;
-    color: #e0e0e0;
 }
 
 #dateClock span {
     line-height: 1.2;
 }
 
-/* Container */
+
+/* =========================================================
+   5. MAIN LAYOUT CONTAINER
+   ========================================================= */
+
 .container {
     display: flex;
     height: calc(100vh - 60px);
 }
 
-/* Sidebar */
+
+/* =========================================================
+   6. LEFT SIDEBAR
+   ========================================================= */
+
 .sidebar {
     width: 230px;
     padding: 8px;
     background: none;
     backdrop-filter: blur(96px);
     border-right: 1px solid rgba(0,0,0,0.9);
-    transition: transform 0.3s ease;
-    z-index: 2;
     overflow-y: auto;
+    transition: transform 0.3s ease;
+    z-index: 900;
     border-radius: 0 16px 16px 0;
 }
 
-.sidebar::-webkit-scrollbar {
-    width: 6px;
-}
 
-.sidebar::-webkit-scrollbar-thumb {
-    background: rgba(100,100,100,0.4);
-    border-radius: 3px;
-}
 
 .sidebar ul {
     list-style: none;
 }
 
-.sidebar li, .sidebar .drop-btn {
+.sidebar li,
+.sidebar .drop-btn {
     font-size: 14px;
     color: #e0e0e0;
 }
 
+/* Home Button */
 .sidebar li.home-btn {
     font-weight: 600;
     padding: 10px 14px;
@@ -174,7 +188,8 @@ header {
     color: #fff;
 }
 
-/* Dropdown styling */
+
+/* Dropdown */
 .sidebar .dropdown {
     margin-bottom: 4px;
 }
@@ -192,8 +207,15 @@ header {
     transition: 0.3s;
 }
 
+.sidebar .drop-btn:hover {
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 0 4px 1px #00ff7f, 0 1px 1px rgba(0,255,0,0.2);
+}
 
-/* RIGHT ALIGNED ARROW */
+.sidebar .dropdown.open > .drop-btn {
+    background: rgba(0,255,127,0.1);
+}
+
 .drop-btn::after {
     content: "▶";
     margin-left: auto;
@@ -207,21 +229,11 @@ header {
     transform: rotate(90deg);
 }
 
-
-.sidebar .drop-btn:hover {
-    background: rgba(255,255,255,0.06);
-    box-shadow: 0 0 4px 1px #00ff7f, 0 1px 1px rgba(0,255,0,0.2);
-}
-
-.sidebar .dropdown.open > .drop-btn {
-    background: rgba(0,255,127,0.1);
-}
-
 .sidebar .drop-content {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
-    margin-left: 8px;
+    margin-left: 12px;
 }
 
 .sidebar .dropdown.open .drop-content {
@@ -230,7 +242,8 @@ header {
 
 .sidebar .drop-content li {
     font-size: 13.5px;
-    background: rgba(0,255,127,0.05);
+    background: rgba(0,26,9,0.9);
+    border-bottom: 1px solid rgba(255,255,255,0.5);
     border-radius: 10px;
     padding: 8px 12px;
     margin-bottom: 4px;
@@ -241,7 +254,37 @@ header {
     background: rgba(0,255,127,0.12);
 }
 
-/* ---------- HOME CARD TEXT ---------- */
+.sidebar .drop-content li a {
+    color: #e0e0e0 !important;
+    text-decoration: none !important;
+    font-size: 14px;
+    font-weight: 400;
+    display: block;
+    flex: 1;
+}
+
+
+
+/* =========================================================
+   7. MAIN CONTENT AREA
+   ========================================================= */
+
+.main {
+    flex: 1;
+    padding: 12px;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    border: none;
+}
+
+
+/* =========================================================
+   8. HOME CARD & DASHBOARD SECTIONS
+   ========================================================= */
 
 .site-title {
     font-size: 20px;
@@ -254,8 +297,6 @@ header {
     margin-bottom: 20px;
     line-height: 1.6;
 }
-
-/* ---------- SECTION INSIDE HOME CARD ---------- */
 
 .home-section {
     margin-top: 10px;
@@ -270,13 +311,18 @@ header {
     margin-bottom: 12px;
     font-size: 17px;
 }
-/* ---------- TASK TABLE (Improved Alignment) ---------- */
+
+
+/* =========================================================
+   9. TASK TABLE
+   ========================================================= */
 
 .task-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
     table-layout: fixed;
+    
 }
 
 /* TABLE HEADER */
@@ -287,6 +333,7 @@ header {
     font-weight: 600;
     text-align: left;
     border-bottom: 2px solid rgba(0,255,127,0.35);
+    
 }
 
 /* TABLE BODY */
@@ -302,7 +349,10 @@ header {
     background: rgba(0,255,127,0.08);
 }
 
-/* ---------- NOTICE BAR ---------- */
+
+/* =========================================================
+   10. NOTICE BAR
+   ========================================================= */
 
 .notice-bar {
     margin-top: 16px;
@@ -337,74 +387,28 @@ header {
     0% { transform: translateX(100%); }
     100% { transform: translateX(-100%); }
 }
+/* =========================================================
+   11. RIGHT SIDEBAR (SEARCH PANEL)
+   ========================================================= */
 
-/* Main content */
-.main {
-    flex: 1;
-    padding: 12px;
-    background-color:none;
-}
-
-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    border-radius: 16px;
-    background: #0a0a0a;
-    box-shadow: 0 16px 48px rgba(0,255,0,0.1);
-    transition: box-shadow 0.3s;
-}
-
-/* ===============================
-   RIGHT SIDEBAR HAMBURGER
-================================ */
-
-#rightSidebarToggle {
-    font-size: 20px;
-    color: #00ff7f;
-    cursor: pointer;
-    display: none;
-    margin-left: 10px;
-}
-
-/* Default (desktop) */
 .right-sidebar {
+    position: relative;
+    top: 0px; /* header height */
+    right: 0;                      
     width: 260px;
-    flex-shrink: 0;
+    height: calc(100vh - 60px);
+    background: rgba(0,0,0,0.97);
+    z-index: 999;
+    transition: right 0.3s ease;
 }
 
-/* ---------- MOBILE VIEW ---------- */
-@media (max-width: 900px) {
-
-    #rightSidebarToggle {
-        display: block;
-    }
-
-    .right-sidebar {
-        position: fixed;
-        top: 60px; /* header height */
-        right: -280px;
-        width: 260px;
-        height: calc(100vh - 60px);
-        background: rgba(0,0,0,0.97);
-        transition: right 0.3s ease;
-        z-index: 999;
-        box-shadow: -6px 0 20px rgba(0,0,0,0.6);
-    }
-
-    .right-sidebar.active {
-        right: 0;
-    }
-}
-
-
-
+    
 /* Search Panel */
 .search-panel {
     width: 260px;
     padding: 8px;
     background: none;
-    backdrop-filter: blur(16px);
+    backdrop-filter: blur(96px);
     border-left: 1px solid rgba(0,0,0,0.9);
     overflow: hidden;
     border-radius: 16px 0 0 16px;
@@ -483,7 +487,7 @@ iframe {
 .pagination {
     display: flex;
     justify-content: center;
-    margin-top: 4px;
+    margin-bottom: 140px;
     flex-wrap: wrap;
 }
 
@@ -518,68 +522,56 @@ iframe {
 .pagination button:hover {
     background: rgba(0,255,127,0.15);
 }
-/* =========================================
-   MOBILE LAYOUT FIX – MAIN CONTENT ALWAYS VISIBLE
-   ADD THIS AT THE END OF YOUR CSS FILE
-========================================= */
 
-@media (max-width: 992px) {
 
-    /* Container should not squeeze main content */
-    .container {
+/* =========================================================
+   12. RESPONSIVE – SIDEBAR BEHAVIOR
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    #sidebarToggleBtn,
+    #rightSidebarToggle {
         display: block;
     }
 
-    /* Main content must always stay visible */
-    .main {
-        width: 100%;
-        min-width: 100%;
-        flex: none;
-        padding: 14px;
-    }
-
-    /* Prevent iframe / cards from collapsing */
-    .main iframe,
-    .main .home-card,
-    .main .task-table {
-        max-width: 100%;
-        overflow-x: auto;
-    }
-
-    /* Left sidebar overlay (already exists, just reinforcing) */
     .sidebar {
         position: fixed;
         top: 60px;
         left: 0;
         height: calc(100vh - 60px);
         transform: translateX(-100%);
-        z-index: 900;
     }
 
     .sidebar.show {
         transform: translateX(0);
     }
 
-    /* Right sidebar overlay (already exists) */
     .right-sidebar {
         position: fixed;
         top: 60px;
         right: -280px;
         height: calc(100vh - 60px);
-        z-index: 950;
     }
 
     .right-sidebar.active {
         right: 0;
     }
-}
 
-@media (max-width: 992px) {
-    #sidebarToggleBtn {
+    .container {
         display: block;
+    }
+
+    .main {
+        width: 100%;
     }
 }
 
+@media (max-width: 600px) {
+    .brand-text {
+        display: none;
+    }
+}
 
 </style>
 </head>
@@ -1029,27 +1021,94 @@ function rotateNotice() {
 loadNotices();
 setInterval(rotateNotice, 15000);
 
+/* ===================================================
+   Sidebar dropdown toggle with auto-collapse
+==================================================== */
 
+document.querySelectorAll('.sidebar .drop-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
 
-// Sidebar dropdown toggle with auto-collapse
-document.querySelectorAll('.sidebar .drop-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
         const parent = btn.parentElement;
-        if(parent.classList.contains('open')){
+
+        if (parent.classList.contains('open')) {
             parent.classList.remove('open');
         } else {
-            document.querySelectorAll('.sidebar .dropdown').forEach(d=>d.classList.remove('open'));
+            document
+                .querySelectorAll('.sidebar .dropdown')
+                .forEach(d => d.classList.remove('open'));
+
             parent.classList.add('open');
         }
     });
 });
 
-// Mobile sidebar toggle
+/* =================== LEFT SIDEBAR TOGGLE =================== */
+
 const sidebar = document.querySelector('.sidebar');
 const toggleBtn = document.getElementById('sidebarToggleBtn');
-toggleBtn.addEventListener('click', () => { sidebar.classList.toggle('show'); });
 
-// Iframe open
+/* =================== RIGHT SIDEBAR TOGGLE =================== */
+
+const rightToggle = document.getElementById("rightSidebarToggle");
+const rightSidebar = document.querySelector(".right-sidebar");
+
+/* ---- STOP PROPAGATION INSIDE SIDEBARS ---- */
+
+sidebar.addEventListener('click', (e) => {
+    e.stopPropagation();
+});
+
+rightSidebar.addEventListener('click', (e) => {
+    e.stopPropagation();
+});
+
+/* =================== LEFT HAMBURGER =================== */
+
+toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+
+    // close right sidebar
+    rightSidebar.classList.remove('active');
+
+    // toggle left sidebar
+    sidebar.classList.toggle('show');
+});
+
+/* =================== RIGHT HAMBURGER =================== */
+
+rightToggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    // close left sidebar
+    sidebar.classList.remove('show');
+
+    // toggle right sidebar
+    rightSidebar.classList.toggle("active");
+});
+
+/* =================== GLOBAL OUTSIDE CLICK =================== */
+
+document.addEventListener('click', (e) => {
+
+    const isLeftSafe =
+        sidebar.contains(e.target) ||
+        toggleBtn.contains(e.target);
+
+    const isRightSafe =
+        rightSidebar.contains(e.target) ||
+        rightToggle.contains(e.target);
+
+    if (!isLeftSafe && !isRightSafe) {
+        sidebar.classList.remove('show');
+        rightSidebar.classList.remove('active');
+    }
+});
+
+/* ===============================
+   Iframe open
+================================ */
+
 function openInIframe(url){
   const iframe = document.getElementById('contentFrame');
   const homeCard = document.getElementById('homeCard');
@@ -1059,7 +1118,10 @@ function openInIframe(url){
   iframe.src = url;
 }
 
-// Date & Time
+/* ===============================
+   Date & Time
+================================ */
+
 function updateDateTime() {
     const now = new Date();
 
@@ -1091,18 +1153,12 @@ updateDateTime();
 setInterval(updateDateTime, 1000);
 
 
-/* =================== Right sidebar toggle =================== */
-
-const rightToggle = document.getElementById("rightSidebarToggle");
-const rightSidebar = document.querySelector(".right-sidebar");
-
-rightToggle.addEventListener("click", () => {
-    rightSidebar.classList.toggle("active");
-});
 
 
+/* =============================================
+   Favorite Pin / Unpin with 3-click toggle
+==================================================== */
 
-/* =================== Favorite Pin / Unpin with 3-click toggle =================== */
 
 const favoriteBtns = document.querySelectorAll('.favorite-btn');
 let savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -1162,7 +1218,10 @@ favoriteBtns.forEach((btn)=>{
 // Initial refresh of pinned items on load
 refreshPinnedList();
 
-/* =================== Pagination + Search + 15 items per page =================== */
+/* =============================================
+   Pagination + Search + 15 items per page
+==================================================== */
+
 
 const searchInput = document.getElementById('searchInput');
 const searchList = document.getElementById('searchList');
@@ -1249,6 +1308,7 @@ searchInput.addEventListener('input', function(){
 });
 
 renderPage(1);
+
 
 </script>
 
