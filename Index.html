@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -117,8 +116,9 @@ header {
     font-size: 10px;
     letter-spacing: 1px;
 }
-
-
+ 
+  
+  
 /* =========================================================
    4. DATE & CLOCK
    ========================================================= */
@@ -193,7 +193,7 @@ header {
 .sidebar ul {
     list-style: none;
 }
-
+  
 .sidebar li,
 .sidebar .drop-btn {
     font-size: 14px;
@@ -208,6 +208,7 @@ header {
     border-radius: 12px;
     margin-bottom: 4px;
     background: rgba(255,255,255,0.9);
+    border-bottom: 3px solid rgba(0,0,0,0.9);
     cursor: pointer;
 }
 
@@ -215,7 +216,30 @@ header {
     background: rgba(0,0,0,0.9);
     color: #fff;
 }
+ 
+  /* =========================================================
+   4. Station Details
+   ========================================================= */
+  .sidebar li.station-btn{
 
+    font-weight: 600;
+    padding: 10px 14px;
+    color: rgba(255,255,255,0.9);
+    border-radius: 12px;
+    margin-bottom: 4px;
+    background: rgba(255,255,255,0.1);
+    border-bottom: 3px solid rgba(0,0,0,0.9);
+    cursor: pointer;
+}
+
+/* hover */
+
+.sidebar li.station-btn:hover{
+
+background: rgba(0,0,0,0.9);
+    color: #fff;
+
+}
 
 /* Dropdown */
 .sidebar .dropdown {
@@ -228,7 +252,7 @@ header {
     margin-bottom: 2px;
     cursor: pointer;
     background: rgba(255,255,255,0.1);
-    border-bottom: 2px solid rgba(0,0,0,0.9);
+    border-bottom: 3px solid rgba(0,0,0,0.9);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -682,7 +706,9 @@ iframe {
             KD-SITE
         </div>
     </div>
-
+ 
+  
+<!-- Date & Time -->
     <div id="dateClock">
         <span id="time">--:--:--</span>
         <span id="date">--/--/----</span>
@@ -701,6 +727,9 @@ iframe {
 <nav class="sidebar">
 <ul>
 <li class="home-btn" onclick="openHome()">Home</li>
+  <li class="station-btn"
+onclick="openInIframe('https://stationinformationsystem.netlify.app')">
+Station Details</li>
 
 <li class="dropdown">
 <div class="drop-btn">Dashboard</div>
@@ -1442,4 +1471,3 @@ rightPinBar.addEventListener("click", function(e){
 
 </body>
 </html>
-
