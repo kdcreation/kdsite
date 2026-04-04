@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +8,7 @@
 <title>KD-SITE Dashboard</title>
 <style>
 /* =========================================================
-   1. GLOBAL RESET & BASE
+   1. GLOBAL RESET & BASE (Light Neumorphic Style)
    ========================================================= */
 
 * {
@@ -18,13 +19,23 @@
 }
 
 body {
-    background: linear-gradient(135deg, #1a4d2e 0%, #2d5016 50%, #1f3a1f 100%);
-    color: #e0e0e0;
+    /* Aapke example wala exact base color */
+    background-color: #cfd8e3; 
+    color: #1e293b; /* Darker text for better readability on light background */
+    
+    /* Layout stability for JS */
+    overflow: hidden; 
+    height: 100vh;
+    width: 100vw;
+    
+    /* Smooth transitions for any theme changes */
+    transition: background 0.3s ease;
 }
 
 
+
 /* =========================================================
-   2. HEADER (TOP NAV BAR)
+   2. HEADER (Top Nav Bar - Soft UI Elevated)
    ========================================================= */
 
 header {
@@ -33,33 +44,45 @@ header {
     justify-content: space-between;
     height: 60px;
     padding: 0 20px;
-    backdrop-filter: blur(12px);
-    border-bottom: 2px solid rgba(0, 0, 0, 0.9);
+    
+    /* Aapke card example wala exact color aur shadow logic */
+    background: #cfd8e3; 
+    
+    /* Neumorphic Shadow: Bahar se upha hua look */
+    box-shadow: 0 4px 10px #a6b1bd, 
+                inset 0 2px 2px #f8faff;
+                
     position: relative;
     z-index: 1000;
+    border-bottom: 1px solid rgba(166, 177, 189, 0.3);
 }
 
-/* Left Sidebar Toggle */
+/* Left Sidebar Toggle - Contrast Blue for icons */
 #sidebarToggleBtn {
     font-size: 22px;
-    color: #00ff7f;
+    color: #1e40af; /* Analysis card wala blue color */
     cursor: pointer;
     margin-right: 12px;
-    display: none;
+    display: none; 
+    /* Icon Depth */
+    text-shadow: 1px 1px 2px #a6b1bd;
 }
 
 /* Right Sidebar Toggle */
 #rightSidebarToggle {
     font-size: 20px;
-    color: #00ff7f;
+    color: #1e40af; 
     cursor: pointer;
-    display: none;
+    display: none; 
     margin-left: 10px;
+    text-shadow: 1px 1px 2px #a6b1bd;
 }
 
 
+
+
 /* =========================================================
-   3. BRAND / LOGO
+   3. BRAND / LOGO (Soft UI Blue/Grey Style)
    ========================================================= */
 
 .brand {
@@ -72,34 +95,46 @@ header {
 
 .brand-text {
     font-size: 18px;
-    font-weight: 600;
-    color: #e0e0e0;
+    font-weight: 700;
+    color: #1e293b; /* Slate Dark Text */
     white-space: nowrap;
     letter-spacing: 1px;
+    /* Soft shadow for depth */
+    text-shadow: 1px 1px 2px #a6b1bd;
 }
 
-/* Logo Circle */
+/* Logo Circle - Soft UI Elevated Look */
 .logo-circle {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    border: 2px solid #00ff7f;
+    background: #cfd8e3; /* Theme Matching Background */
+    
+    /* Neumorphic Shadows: Dark bottom-right (#a6b1bd) + Light top-left (#f8faff) */
+    box-shadow: 5px 5px 10px #a6b1bd, 
+                -4px -4px 10px #f8faff;
+                
+    border: 1px solid rgba(255, 255, 255, 0.4);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #00ff7f;
+    color: #1e40af; /* Blue Accent */
     transition: all 0.25s ease;
 }
 
 .brand:hover .logo-circle {
-    box-shadow: 0 0 14px rgba(0,255,127,0.7);
-    transform: scale(1.05);
+    /* Hover par "Pressed" (Inset) Look */
+    box-shadow: inset 3px 3px 7px #a6b1bd, 
+                inset -3px -3px 7px #f8faff;
+    transform: scale(1.02);
 }
 
 .logo-text {
-    font-weight: 700;
+    font-weight: 800;
     line-height: 1;
+    /* Contrast Shadow */
+    text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.8);
 }
 
 .logo-text.top {
@@ -109,19 +144,22 @@ header {
 .logo-divider {
     width: 70%;
     height: 1.5px;
-    background: #00ff7f;
+    background: #1e40af; /* Blue Divider */
     margin: 2px 0;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
 
 .logo-text.bottom {
     font-size: 10px;
     letter-spacing: 1px;
 }
+
+
  
   
   
 /* =========================================================
-   4. DATE & CLOCK
+   4. DATE & CLOCK (Soft UI Inset Look)
    ========================================================= */
 
 #dateClock {
@@ -131,327 +169,414 @@ header {
     font-size: 13px;
     margin-left: auto;
     margin-right: 12px;
+    
+    /* Original base color to match header */
+    padding: 6px 12px;
+    background: #cfd8e3;
+    border-radius: 10px;
+    
+    /* Inset shadow for carved-in depth effect */
+    box-shadow: inset 3px 3px 6px #a6b1bd, 
+                inset -3px -3px 6px #f8faff;
 }
 
 #dateClock span {
-    line-height: 1.2;
+    line-height: 1.3;
+    color: #1e40af; /* Analysis card wala blue for numbers */
+    font-weight: 700;
+    /* Clean text depth */
+    text-shadow: 0.5px 0.5px 0px rgba(255, 255, 255, 0.8);
 }
 
 
+
+
 /* =========================================================
-   LOGIN BUTTON
+   5. LOGIN BUTTON (Vibrant 3D Amber Style)
    ========================================================= */
    
-   .login-btn {
+.login-btn {
     display: flex;
     flex-direction: column;
-    padding: 6px 16px;
-    background: #00b300;
-    color: #000;
-    border-bottom: 4px solid rgba(0,0,0,0.9);
-    border-radius: 10px;
+    padding: 10px 20px;
+    background: #f59e0b; /* Aapke example wala Amber/Orange */
+    color: #ffffff; /* White text for high contrast */
+    font-weight: 800;
+    border: none;
+    border-radius: 12px;
     cursor: pointer;
     font-size: 14px;
     margin-right: 10px;
-    text-shadow:
-    0 1px 0 rgba(0,0,0,0.35), /* top light */
-    0 2px 0 rgba(255,255,255,0.35),               /* depth */
-    0 3px 4px rgba(255,255,255,0.35);   /* soft blur */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.1s ease;
+    
+    /* 3D Depth: Bottom dark shadow (#d97706) + Outer soft shadow */
+    box-shadow: 0 5px 0 #d97706, 
+                0 8px 15px rgba(0,0,0,0.2),
+                inset 0 1px 1px rgba(255,255,255,0.4);
+
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 .login-btn:hover {
-    background: #0ea5e9;
-    color: #fff;
+    background: #fbbf24; /* Slightly brighter on hover */
+    transform: translateY(-1px);
+    box-shadow: 0 6px 0 #d97706, 
+                0 10px 20px rgba(0,0,0,0.25);
 }
+
+/* Pressed State: Example cards wala "Inset" feel */
+.login-btn:active {
+    transform: translateY(4px); /* Button moves down */
+    background: #f59e0b;
+    /* Box shadow switches to shallow to look pressed */
+    box-shadow: 0 1px 0 #d97706, 
+                inset 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+
    
    
    
 
 /* =========================================================
-   5. MAIN LAYOUT CONTAINER
+   6. MAIN LAYOUT CONTAINER (Soft UI Base Layer)
    ========================================================= */
 
 .container {
-    display: flex;
-    height: calc(100vh - 60px);
+    display: flex; /* Sidebar aur Main content side-by-side rahega */
+    height: calc(100vh - 60px); /* Header height minus karke full screen math */
+    width: 100%;
+    
+    /* Body wala exact grey-blue color */
+    background: #cfd8e3; 
+    
+    /* Neumorphic Inset Shadow: Container ko gehraai (depth) dene ke liye */
+    /* Darker shadow top-left aur light top highlight */
+    box-shadow: inset 8px 8px 16px #a6b1bd, 
+                inset -4px -4px 12px #f8faff;
+    
+    position: relative;
+    overflow: hidden; /* Scrollbars ko manage karne ke liye */
 }
 
 
+
 /* =========================================================
-   6. LEFT SIDEBAR
+   7. LEFT SIDEBAR (Refined Logic & Darker Relative List)
    ========================================================= */
 
 .sidebar {
     width: 230px;
-    padding: 8px;
-    background: linear-gradient(135deg, #1a4d2e 0%, #2d5016 50%, #1f3a1f 100%);
-    backdrop-filter: blur(96px);
-    border-right: 1px solid rgba(0,0,0,0.9);
-    overflow-y: auto;
-    transition: transform 0.3s ease;
-    z-index: 900;
-    border-radius: 0 16px 16px 0;
+    padding: 12px 10px;
+    background: #cfd8e3;
+    box-shadow: 6px 0 15px #a6b1bd;
 }
 
-
-
-.sidebar ul {
-    list-style: none;
-}
-  
-.sidebar li,
-.sidebar .drop-btn {
-    font-size: 14px;
-    color: #e0e0e0;
-}
-
-/* Home Button */
+/* 🏠 HOME BUTTON (Primary Blue) */
 .sidebar li.home-btn {
-    font-weight: 600;
-    padding: 10px 14px;
-    color: rgba(255,255,255,0.9);
-    border-radius: 12px;
-    margin-bottom: 4px;
-    background: rgba(7,118,237,0.9);
-    border-bottom: 4px solid rgba(0,0,0,0.9);
-    cursor: pointer;
-    letter-spacing: 1.5px;
-  
-  text-shadow:
-    0 1px 0 rgba(255,255,255,0.35), /* top light */
-    0 2px 0 rgba(0,0,0,0.55),               /* depth */
-    0 3px 4px rgba(0,0,0,0.35);   /* soft blur */
-}
-
-.sidebar li.home-btn:hover {
-    background: rgba(0,0,0,0.9);
+    list-style: none;
+    font-weight: 800;
+    padding: 12px;
     color: #fff;
-}
- 
-  /* =========================================================
-   4. Station Details
-   ========================================================= */
-  .sidebar li.station-btn{
-
-    font-weight: 400;
-	padding: 8px 14px;
-	height: 39px;
-    color: rgba(255,255,255,0.9);
-    border-radius: 12px;
-    margin-bottom: 4px;
-    background: rgba(255,255,255,0.1);
-    border-bottom: 4px solid rgba(0,0,0,0.9);
+    border-radius: 14px;
+    margin-bottom: 12px;
+    background: #1e40af;
     cursor: pointer;
-    letter-spacing: 1.5px;
-    
-    text-shadow:
-    0 1px 0 rgba(255,255,255,0.35), /* top light */
-    0 2px 0 rgba(0,0,0,0.55),               /* depth */
-    0 3px 4px rgba(0,0,0,0.35);   /* soft blur */
+    text-align: center;
+    box-shadow: 0 5px 0 #16318d, 0 8px 15px rgba(30, 64, 175, 0.3);
+    transition: 0.1s;
 }
 
-/* hover */
-
-.sidebar li.station-btn:hover{
-
-background: rgba(0,0,0,0.9);
-    color: #fff;
-
+/* 🚉 STATION DETAILS BUTTON */
+.sidebar li.station-btn {
+    list-style: none;
+    font-weight: 700;
+    padding: 12px 15px;
+    color: #1e293b;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    background: #cfd8e3;
+    cursor: pointer;
+    box-shadow: 5px 5px 10px #a6b1bd, -5px -5px 10px #f8faff;
+    transition: 0.2s;
 }
 
-/* Dropdown */
-.sidebar .dropdown {
-    margin-bottom: 4px;
-}
-
+/* 🔽 DROPDOWN BUTTONS (With 3D Indicator) */
 .sidebar .drop-btn {
-    padding: 8px 14px;
+    font-weight: 700;
+    padding: 12px 15px;
+    color: #1e293b;
     border-radius: 12px;
-    margin-bottom: 2px;
-    cursor: pointer;
-    background: rgba(255,255,255,0.1);
-    border-bottom: 4px solid rgba(0,0,0,0.9);
+    margin-bottom: 10px;
+    background: #cfd8e3;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: 0.3s;
-    letter-spacing: 1.5px;
-  
-  text-shadow:
-    0 1px 0 rgba(255,255,255,0.35), /* top light */
-    0 2px 0 rgba(0,0,0,0.55),               /* depth */
-    0 3px 4px rgba(0,0,0,0.35);   /* soft blur */
+    cursor: pointer;
+    box-shadow: 5px 5px 10px #a6b1bd, -5px -5px 10px #f8faff;
 }
 
-.sidebar .drop-btn:hover {
-    background: rgba(255,255,255,0.06);
-    box-shadow: 0 0 4px 1px #00ff7f, 0 1px 1px rgba(0,255,0,0.2);
+/* 3D Arrow Indicator */
+.sidebar .drop-btn::after {
+    content: '▾'; /* Triangle shape */
+    font-size: 18px;
+    color: #1e40af;
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    transform: rotate(-90deg); /* Default Close state */
 }
 
+/* Open State for Dropdown */
 .sidebar .dropdown.open > .drop-btn {
-    background: rgba(0,255,127,0.1);
+    box-shadow: inset 4px 4px 8px #a6b1bd, inset -4px -4px 8px #f8faff;
+    color: #1e40af;
+    border-radius: 12px 12px 0 0;
 }
 
-.drop-btn::after {
-    content: "▶";
-    margin-left: auto;
-    transition: transform 0.25s ease;
-    font-size: 10px;
-    opacity: 0.8;
+.sidebar .dropdown.open > .drop-btn::after {
+    transform: rotate(0deg); /* Open state down arrow */
 }
 
-/* ROTATE WHEN OPEN */
-.dropdown.open > .drop-btn::after {
-    transform: rotate(90deg);
-}
-
+/* 📜 DARKER RELATIVE DROPDOWN LIST */
 .sidebar .drop-content {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease;
-    margin-left: 12px;
+    transition: max-height 0.4s ease;
+    background: #b8c4d1; /* Gehra shade relative dikhne ke liye */
+    border-radius: 0 0 12px 12px;
+    box-shadow: inset 3px 3px 7px #9ba7b5;
+    margin-bottom: 5px;
 }
 
 .sidebar .dropdown.open .drop-content {
     max-height: 500px;
+    padding: 12px 8px;
+    margin-bottom: 15px;
 }
 
+/* List Items - Darker Contrast Rows */
 .sidebar .drop-content li {
-    font-size: 13.5px;
-    background: rgba(0,26,9,0.9);
-    border-bottom: 1px solid rgba(255,255,255,0.5);
-    border-radius: 10px;
-    padding: 8px 12px;
-    margin-bottom: 4px;
-    transition: 0.3s;
-}
-
-.sidebar .drop-content li:hover {
-    background: rgba(0,255,127,0.12);
+    list-style: none;
+    margin-bottom: 8px;
 }
 
 .sidebar .drop-content li a {
-    color: #e0e0e0 !important;
-    text-decoration: none !important;
-    font-size: 14px;
-    font-weight: 400;
     display: block;
-    flex: 1;
-    letter-spacing: 1.5px;
-  
-  text-shadow:
-    0 1px 0 rgba(255,255,255,0.35), /* top light */
-    0 2px 0 rgba(0,0,0,0.55),               /* depth */
-    0 3px 4px rgba(0,0,0,0.35);   /* soft blur */
+    padding: 10px;
+    background: #a6b1bd; /* Darker than parent background */
+    border-radius: 8px;
+    color: #0f172a !important; /* High contrast dark text */
+    text-decoration: none !important;
+    font-size: 13px;
+    font-weight: 700;
+    /* Soft shadow to pop out from dark background */
+    box-shadow: 3px 3px 6px #9ba7b5, -2px -2px 5px #c9d5e2;
+    transition: all 0.3s ease;
+}
+
+/* Hover - Analysis Row Pressed Style */
+.sidebar .drop-content li a:hover {
+    box-shadow: inset 3px 3px 6px #8c97a3, inset -2px -2px 5px #f8faff;
+    color: #1e40af !important;
+    transform: translateX(5px);
+    background: #b1bcc9;
 }
 
 
-
 /* =========================================================
-   7. MAIN CONTENT AREA
+   8. MAIN CONTENT AREA (Soft UI Recessed Panel)
    ========================================================= */
 
 .main {
-    flex: 1;
-    height: 99%;
-    padding: 12px;
+    flex: 1; 
+    height: 100%; 
+    padding: 20px; 
+    background: #cfd8e3; /* Original Body Theme */
+    overflow: hidden;
 }
 
 iframe {
     width: 100%;
-    height: 99%;
-    border-radius: 16px;
+    height: 100%;
+    border-radius: 25px; /* Thoda aur rounded for soft UI feel */
     border: none;
+    background: #cfd8e3;
+    
+    /* 3D Inset Shadow: Iframe ko dashboard ke andar "dhansa hua" dikhane ke liye */
+    /* Darker grey (#a6b1bd) + Pure White (#f8faff) highlights */
+    box-shadow: inset 8px 8px 16px #a6b1bd, 
+                inset -8px -8px 16px #f8faff;
+                
+    /* Subtle edge line for definition */
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
+
+/* Hover Effect - Deeper Recess */
+iframe:hover {
+    box-shadow: inset 12px 12px 24px #9ba7b5, 
+                inset -10px -10px 20px #f8faff;
+    transform: scale(0.998); /* Halka sa dabne wala feel */
+}
+
 
 
 /* =========================================================
-   8. HOME CARD & DASHBOARD SECTIONS
+   9. HOME CARD & DASHBOARD SECTIONS (Soft UI High-Contrast)
    ========================================================= */
 
 .site-title {
-    font-size: 20px;
-    font-weight: 600;
-    color: #00e673;
-    margin-bottom: 8px;
+    font-size: 24px; 
+    font-weight: 800;
+    color: #1e40af; /* Analysis Blue Title */
+    margin-bottom: 12px;
+    /* Soft Blue Glow and subtle depth */
+    text-shadow: 1px 1px 2px #a6b1bd, 0 0 8px rgba(30, 64, 175, 0.15);
 }
 
 .site-desc {
-    margin-bottom: 20px;
-    line-height: 1.6;
+    margin-bottom: 25px;
+    line-height: 1.7;
+    color: #1e293b; /* Dark Slate for readability */
+    font-weight: 500;
 }
 
 .home-section {
-    margin-top: 10px;
-    background: rgba(255,255,255,0.07);
-    padding: 16px;
-    border-radius: 12px;
+    margin-top: 25px;
+    /* Body color se thoda sa fresh shade */
+    background: #cfd8e3; 
+    padding: 30px;
+    border-radius: 25px;
+    
+    /* Neumorphic Pop-out: Light top-left + Dark bottom-right */
+    box-shadow: 12px 12px 24px #a6b1bd, 
+                -12px -12px 24px #f8faff;
+                
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Hover par card "Lift" hoga */
+.home-section:hover {
+    transform: translateY(-1px);
+    box-shadow: 20px 20px 40px #a6b1bd, 
+                -15px -15px 30px #f8faff;
 }
 
 .home-section h3 {
     text-align: center;
-    color: #00ff9c;
-    margin-bottom: 12px;
-    font-size: 17px;
+    color: #1e40af; /* Bold Blue for headings */
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    /* Inset/Embossed Text Effect */
+    text-shadow: 1px 1px 1px #f8faff, -1px -1px 1px rgba(0,0,0,0.1);
 }
 
 
+
 /* =========================================================
-   9. TASK TABLE
+   10. TASK TABLE (Soft UI Analysis Style)
    ========================================================= */
 
 .task-table {
     width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
+    border-collapse: separate; 
+    border-spacing: 0 12px; /* Rows ke beech ka gap 3D feel ke liye */
+    font-size: 13.5px;
     table-layout: fixed;
-    
 }
 
-/* TABLE HEADER */
+/* TABLE HEADER - High Contrast Dark Look */
 .task-table thead th {
-    background: rgba(0,0,0,0.45);
-    padding: 10px 12px;
-    color: #9cffd1;
-    font-weight: 600;
+    background: #0f172a; /* Deep Slate (Table head contrast ke liye) */
+    padding: 16px 12px;
+    color: #38bdf8; /* Sky Blue text like your example */
+    font-weight: 800;
     text-align: left;
-    border-bottom: 2px solid rgba(0,255,127,0.35);
-    
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-/* TABLE BODY */
+.task-table thead th:first-child { border-radius: 12px 0 0 12px; }
+.task-table thead th:last-child { border-radius: 0 12px 12px 0; }
+
+/* TABLE BODY ROWS - Floating Analysis Strips */
 .task-table tbody td {
-    padding: 10px 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.12);
-    color: #eaffea;
+    padding: 14px 15px;
+    background: #cfd8e3; /* Card background match */
+    color: #1e293b; /* Dark Slate text */
+    font-weight: 600;
     vertical-align: middle;
+    border: none;
+    /* Soft Neumorphic Elevation */
+    box-shadow: 5px 5px 10px #a6b1bd, 
+                -5px -5px 10px #f8faff;
+    transition: all 0.2s ease;
 }
 
-/* ROW HOVER */
-.task-table tbody tr:hover {
-    background: rgba(0,255,127,0.08);
+/* Rounded corners for the strips */
+.task-table tbody td:first-child { 
+    border-radius: 12px 0 0 12px; 
 }
+.task-table tbody td:last-child { 
+    border-radius: 0 12px 12px 0; 
+}
+
+/* ROW HOVER - Your Example Style (Inset/Pressed Look) */
+.task-table tbody tr:hover td {
+    background: #cfd8e3;
+    color: #1e40af; /* Blue highlight on hover */
+    /* Hover par row "baahar" ki jagah "andar" dabegi (Inset Shadow) */
+    box-shadow: inset 4px 4px 8px #a6b1bd, 
+                inset -4px -4px 8px #f8faff;
+    transform: translateY(1px); /* Slight sink effect */
+    cursor: pointer;
+}
+
+
 
 
 /* =========================================================
-   10. NOTICE BAR
+   11. NOTICE BAR (Soft UI Blue-Slate Inset Track)
    ========================================================= */
 
 .notice-bar {
-    margin-top: 16px;
+    margin-top: 25px;
     display: flex;
     align-items: center;
-    background: #000;
-    border-radius: 6px;
-    padding: 6px 10px;
+    /* Deep Slate/Blue shade for better contrast against light background */
+    background: #b8c4d1; 
+    border-radius: 14px; 
+    padding: 10px 20px;
     overflow: hidden;
+    
+    /* 3D Inset Shadow: Panel ke andar "dhansa hua" look dene ke liye */
+    box-shadow: inset 5px 5px 10px #9ba7b5, 
+                inset -3px -3px 8px #f8faff;
+                
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .notice-label {
-    color: #00aaff;
-    font-weight: bold;
-    margin-right: 12px;
+    /* Analysis card wala deep blue for visibility */
+    color: #1e40af; 
+    font-weight: 800;
+    margin-right: 18px;
     white-space: nowrap;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    /* Soft glow/depth for importance */
+    text-shadow: 1px 1px 0px #f8faff;
 }
 
 .notice-track {
@@ -463,390 +588,428 @@ iframe {
     display: inline-block;
     white-space: nowrap;
     animation: scrollNotice 18s linear infinite;
-    color: #ffffff;
-}
-
- /* Add this to allow smooth pause on hover */
+    color: #0f172a; /* Dark text for readability on tinted track */
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.5px;
     animation-play-state: running;
 }
 
-/* Hover effect: pause scrolling when hovering over notice bar */
+/* Hover: pause scrolling */
 .notice-bar:hover #noticeText {
     animation-play-state: paused;
+    cursor: pointer;
 }
 
 @keyframes scrollNotice {
     0% { transform: translateX(100%); }
     100% { transform: translateX(-100%); }
 }
+
+
+
 /* =========================================================
-   11. RIGHT SIDEBAR (SEARCH PANEL)
+   12. RIGHT SIDEBAR & SEARCH PANEL (Soft UI Analysis Style)
    ========================================================= */
 
 .right-sidebar {
     position: relative;
-    top: 0px; /* header height */
+    top: 0px; 
     right: 0;
-    background: linear-gradient(135deg, #1a4d2e 0%, #2d5016 50%, #1f3a1f 100%);
     width: 260px;
     height: calc(100vh - 60px);
-    background: rgba(0,0,0,0.97);
+    background: #cfd8e3; /* Main Theme Base */
     z-index: 999;
     transition: right 0.3s ease;
+    /* Soft left shadow for elevation */
+    box-shadow: -6px 0 15px #a6b1bd;
 }
 
-    
-/* Search Panel */
 .search-panel {
     width: 260px;
-    padding: 8px;
-    background: linear-gradient(135deg, #1a4d2e 0%, #2d5016 50%, #1f3a1f 100%);
-    backdrop-filter: blur(96px);
-    border-left: 1px solid rgba(0,0,0,0.9);
-    overflow: hidden;
-    border-radius: 16px 0 0 16px;
+    height: 100%;
+    padding: 15px;
+    background: #cfd8e3;
+    border-left: 1.5px solid rgba(255, 255, 255, 0.4);
+    border-radius: 20px 0 0 20px;
     display: flex;
     flex-direction: column;
 }
 
+/* 🔍 SEARCH INPUT - Highlighted Inset Look */
 .search-panel input {
     width: 100%;
-    padding: 8px 12px;
-    border-radius: 12px;
+    padding: 14px 18px;
+    border-radius: 14px;
     border: none;
     outline: none;
-    background: rgba(255,255,255,0.9);
-    color: rgba(223,223,223,0.9);
-    margin-bottom: 8px;
+    /* Alag color (Deep Blue-Grey tint) taaki user ko turant dikhe */
+    background: #b8c4d1; 
+    color: #1e293b;
+    margin-bottom: 20px;
     font-size: 14px;
-    transition: 0.3s;
+    font-weight: 600;
+    /* Stronger Inset Shadow for focus */
+    box-shadow: inset 4px 4px 8px #9ba7b5, 
+                inset -3px -3px 8px #f8faff;
+    transition: all 0.3s ease;
+}
+
+.search-panel input::placeholder {
+    color: #1e40af;
+    opacity: 0.6;
 }
 
 .search-panel input:focus {
-    background: rgba(255,255,255,0.08);
-    box-shadow: 0 0 8px #00ff7f,0 4px 8px rgba(0,255,0,0.15);
+    background: #c3cedb;
+    box-shadow: inset 6px 6px 12px #9ba7b5, 
+                0 0 10px rgba(30, 64, 175, 0.15);
 }
 
-.search-list-container {
-    flex: 1;
-    overflow-y: auto;
-}
-
+/* 📜 SEARCH LIST ITEMS - Analysis Row Style */
 .search-list li {
     list-style: none;
-    padding: 8px 12px;
-    margin-bottom: 6px;
+    padding: 14px;
+    margin-bottom: 12px;
     border-radius: 12px;
     cursor: pointer;
-    background: rgba(255,255,255,0.12);
-    border-bottom: 2px solid rgba(0,0,0,0.9);
-    color: rgba(0, 0, 0, 0.9);
-    font-size: 14px;
+    background: #cfd8e3;
+    color: #1e293b;
+    font-size: 14.5px;
+    font-weight: 600;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    /* Popped out cards */
+    box-shadow: 4px 4px 8px #a6b1bd, 
+                -4px -4px 8px #f8faff;
     transition: 0.3s;
 }
 
 .search-list li:hover {
-    background: rgba(255,255,255,0.06);
-    box-shadow: 0 0 4px 1px #00ff7f, 0 4px 8px rgba(0,255,0,0.2);
+    transform: translateY(-2px);
+    color: #1e40af;
+    box-shadow: 6px 6px 12px #a6b1bd, 
+                -6px -6px 12px #f8faff;
 }
 
-.search-panel .search-list li a {
-    color: #e0e0e0 !important;
-    text-decoration: none !important;
-    font-size: 14px;
-    font-weight: 400;
-    display: block;
-    flex: 1;
-    letter-spacing: 1.5px;
-  
-  text-shadow:
-    0 1px 0 rgba(255,255,255,0.35), /* top light */
-    0 2px 0 rgba(0,0,0,0.55),               /* depth */
-    0 3px 4px rgba(0,0,0,0.35);   /* soft blur */
+.search-list li:active {
+    transform: translateY(1px);
+    box-shadow: inset 4px 4px 8px #a6b1bd;
 }
 
 .favorite-btn {
     cursor: pointer;
     margin-left: 8px;
-    color: rgba(200,200,200,0.6);
-    font-size: 14px;
+    color: #a6b1bd;
     transition: 0.3s;
 }
 
-.favorite-btn.active {
-    color: #00ff7f;
+.favorite-btn.active, .favorite-btn:hover {
+    color: #1e40af;
+    text-shadow: 0 0 8px rgba(30, 64, 175, 0.3);
 }
 
-.favorite-btn:hover {
-    color: #00ff7f;
-}
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 140px;
-    flex-wrap: wrap;
-}
-
+/* 🔢 PAGINATION - Soft UI Blocks */
 .pagination button {
-    background: none;
+    background: #cfd8e3;
     border: none;
-    color: #bdbdbd;
-    padding: 4px 8px;
+    color: #1e293b;
+    padding: 8px 12px;
+    border-radius: 10px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 3px 3px 6px #a6b1bd, -3px -3px 6px #f8faff;
+    margin: 0 4px;
 }
 
-/* Pagination page seprator */
-
-.pagination button::after {
-    content: "|";
-    margin-left: 10px;
-    color: #444;
-}
-
-.pagination button:last-of-type::after {
-    content: "";
-}
-
-/* Pagination active page */
 .pagination button.active {
-    background-color: #00ff7f;
-    color: #000;
-    font-weight: 600;
+    background-color: #1e40af;
+    color: #fff;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.3);
 }
-
-.pagination button:hover {
-    background: rgba(0,255,127,0.15);
-}
-
 
 /* =========================================================
-   12. RESPONSIVE – SIDEBAR BEHAVIOR
+   13. RESPONSIVE – SIDEBAR BEHAVIOR (Restored & Styled)
    ========================================================= */
 
 @media (max-width: 1100px) {
 
+    /* Hamburger Buttons ko wapis dikhane ke liye */
     #sidebarToggleBtn,
     #rightSidebarToggle {
-        display: block;
+        display: block !important; /* Ensure visibility */
+        color: #1e40af; /* Analysis Blue */
+        cursor: pointer;
+        text-shadow: 1px 1px 2px #a6b1bd;
     }
 
+    /* Left Sidebar - Mobile Fixed Position */
     .sidebar {
         position: fixed;
         top: 60px;
         left: 0;
         height: calc(100vh - 60px);
-        transform: translateX(-100%);
+        width: 260px; /* Thoda wide for touch */
+        transform: translateX(-100%); /* Hidden by default */
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 2000;
+        background: #cfd8e3;
+        /* Stronger shadow for mobile overlay */
+        box-shadow: 10px 0 30px rgba(166, 177, 189, 0.8);
     }
 
+    /* JS logic selector */
     .sidebar.show {
         transform: translateX(0);
     }
 
+    /* Right Sidebar - Mobile Fixed Position */
     .right-sidebar {
         position: fixed;
         top: 60px;
-        right: -280px;
+        right: -300px; /* Fully hidden */
         height: calc(100vh - 60px);
+        width: 280px;
+        transform: none;
+        transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 2000;
+        background: #cfd8e3;
+        box-shadow: -10px 0 30px rgba(166, 177, 189, 0.8);
     }
 
+    /* JS logic selector */
     .right-sidebar.active {
         right: 0;
     }
 
+    /* Main Container reset for mobile */
     .container {
-        display: block;
+        display: block; /* Flex ko hata kar stack karne ke liye */
     }
 
     .main {
         width: 100%;
+        padding: 10px;
     }
 }
 
+/* Tablet/Mobile Brand Hide Logic */
 @media (max-width: 600px) {
     .brand-text {
         display: none;
     }
+    
+    .logo-circle {
+        width: 42px;
+        height: 42px;
+    }
 }
+
+
+
   
-  /* =========================================================
-   DESKTOP RIGHT SIDEBAR PIN SYSTEM
+ /* =========================================================
+   DESKTOP RIGHT SIDEBAR PIN SYSTEM (Soft UI Handle)
    ========================================================= */
 
 @media (min-width: 1101px){
 
-  .right-sidebar{
+  .right-sidebar {
       position: fixed;
       top: 60px;
       right: 0;
       height: calc(100vh - 60px);
       transform: translateX(100%);
       transition: transform 0.3s ease;
+      /* Soft UI shadow for the sliding panel */
+      box-shadow: -10px 0 30px #a6b1bd;
+      border-left: 1.5px solid rgba(255, 255, 255, 0.4);
+      background: #cfd8e3;
   }
 
-  .right-sidebar.active{
+  .right-sidebar.active {
       transform: translateX(0);
   }
 
-  .right-pin-bar{
+  /* 3D Pin Bar Handle - Soft UI Style */
+  .right-pin-bar {
       position: fixed;
-      top: 40%;
+      top: 45%; 
       right: 0;
       transform: translateY(-50%);
-      width: 8px;
+      width: 12px; 
       height: 80px;
-      background: #00ff7f;
-      border-radius: 8px 0 0 8px;
+      background: #cfd8e3; 
+      border-radius: 12px 0 0 12px;
       cursor: pointer;
       z-index: 1200;
-      transition: all 0.3s ease;
+      
+      /* Neumorphic Pop-out Handle */
+      box-shadow: -5px 5px 10px #a6b1bd, 
+                  inset 2px 2px 3px #f8faff;
+      
+      border: 1.5px solid #1e40af; /* Analysis Blue Border */
+      border-right: none;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
-  .right-pin-bar:hover{
-      width: 14px;
-      background: #0ea5e9;
+  /* Hover effect: Glow and Slide out */
+  .right-pin-bar:hover {
+      width: 20px;
+      background: #1e40af;
+      box-shadow: -8px 8px 15px rgba(30, 64, 175, 0.3);
   }
-  /* PUSH EFFECT FOR MAIN CONTENT */
 
-  main{
+  /* Handle Indicator Icon (3D Grooves) */
+  .right-pin-bar::after {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 25%;
+      width: 2px;
+      height: 50%;
+      background: #1e40af; /* Indicator matches blue theme */
+      border-radius: 2px;
+      box-shadow: 1px 0 1px #f8faff;
+  }
+
+  .right-pin-bar:hover::after {
+      background: #ffffff;
+  }
+
+  /* PUSH EFFECT (Original Logic) */
+  main {
       transition: margin-right 0.3s ease;
   }
 
-  body.right-open main{
+  body.right-open main {
       margin-right: 260px;
   }
-
 }
+
+
   
-   /* =========================================================
-   QUICK MENU BUTTON
+  /* =========================================================
+   QUICK MENU BUTTON (Soft UI Blue/Amber Style)
    ========================================================= */
- /* 🔵 Main Button */
-.quick-btn{
+
+/* 🔵 Main Button - Elevated Blue Sphere */
+.quick-btn {
   position: fixed;
   bottom: 25px;
   right: 25px;
-  width: 45px;
-  height: 45px;
+  width: 55px; 
+  height: 55px;
   border-radius: 50%;
-  cursor:pointer;
-  z-index:9999;
+  cursor: pointer;
+  z-index: 9999;
 
-  /* 🔥 outer ring subtle */
-  background: linear-gradient(180deg,#3a3a3a,#1c1c1c);
+  /* Theme Matching Soft Gradient */
+  background: linear-gradient(145deg, #dce6f2, #bac3cc);
 
+  /* Neumorphic Pop-out + Deep Shadow for Floating feel */
   box-shadow:
-    0 8px 14px rgba(0,0,0,0.7), /* outer depth */
-    inset 0 2px 3px rgba(255,255,255,0.08),
-    inset 0 -4px 6px rgba(0,0,0,0.9);
+    8px 8px 16px #a6b1bd, 
+    -6px -6px 12px #f8faff,
+    inset 0 1px 1px rgba(255,255,255,0.5);
 
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
 }
 
-/* inner depth circle */
-.quick-btn .btn-inner{
-  width: 40px;
-  height: 40px;
+/* inner depth circle - Carved into the button */
+.quick-btn .btn-inner {
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  display:flex;
-  justify-content:center;
-  align-items:center;
-
-  background: radial-gradient(circle at 30% 30%, #2f2f2f, #121212);
-
+  /* Recessed/Inset effect */
+  background: #cfd8e3;
   box-shadow:
-    inset 0 3px 6px rgba(0,0,0,0.9),
-    inset 0 -2px 3px rgba(255,255,255,0.05);
+    inset 4px 4px 8px #a6b1bd,
+    inset -2px -2px 6px #f8faff;
 }
 
-/* 🔤 Q TEXT (lifted) */
-.quick-btn span{
-  font-size:20px;
-  font-weight:700;
-  color:#e5e7eb;
-
-  text-shadow:
-    0 1px 0 rgba(255,255,255,0.15),
-    0 3px 4px rgba(0,0,0,0.9);
+/* 🔤 Q TEXT (Analysis Blue) */
+.quick-btn span {
+  font-size: 22px;
+  font-weight: 900;
+  color: #1e40af;
+  text-shadow: 1px 1px 0px #f8faff;
 }
 
-/* hover subtle */
-.quick-btn:hover{
-  filter: brightness(1.08);
+/* hover - More elevation */
+.quick-btn:hover {
+  transform: scale(1.08) translateY(-3px);
+  box-shadow: 12px 12px 24px #a6b1bd, -8px -8px 16px #f8faff;
 }
 
-/* press */
-.quick-btn:active{
-  transform: translateY(2px);
-  box-shadow:
-    0 4px 8px rgba(0,0,0,0.7),
-    inset 0 3px 6px rgba(0,0,0,0.9);
+/* press - Real tactile click effect */
+.quick-btn:active {
+  transform: translateY(4px);
+  box-shadow: inset 4px 4px 8px #a6b1bd, inset -4px -4px 8px #f8faff;
 }
 
-/* 🔗 Menu */
-.quick-menu{
+/* 🔗 Menu Container (Original JS Logic) */
+.quick-menu {
   position: fixed;
-  bottom: 90px;
+  bottom: 95px;
   right: 25px;
-  display:flex;
+  display: flex;
   flex-direction: column;
-  gap:12px;
-  opacity:0;
-  pointer-events:none;
-  transform: translateY(15px);
-  transition:0.2s;
+  gap: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.quick-menu.active{
-  opacity:1;
-  pointer-events:auto;
+.quick-menu.active {
+  opacity: 1;
+  pointer-events: auto;
   transform: translateY(0);
 }
 
-/* Buttons */
-.quick-menu a{
-  background: #025aa3;
-  color:#fff;
-  padding:6px 10px;
-  border-radius:10px;
-  text-decoration:none;
-  font-size:13px;
-  min-width:50px;
-  text-align:left;
-  letter-spacing: 1.5px;
-  box-shadow: 0 6px 0 #012340, 0 8px 12px rgba(0,0,0,0.25);
-  transition:0.15s;
+/* Buttons - Analysis Blue 3D Blocks */
+.quick-menu a {
+  background: #1e40af; /* Analysis Blue */
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 13px;
+  min-width: 150px;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 1px;
+  
+  /* 3D Depth logic like your example button */
+  box-shadow: 0 5px 0 #16318d, 0 10px 20px rgba(0,0,0,0.2);
+  transition: all 0.1s ease;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
-/* hover */
-.quick-menu a:hover{
-  background: #b56707;
-  transform: -4px;
+/* hover - Switch to Amber like your Example Gen Button */
+.quick-menu a:hover {
+  background: #f59e0b; /* Amber/Orange highlight */
+  box-shadow: 0 6px 0 #d97706, 0 12px 25px rgba(0,0,0,0.25);
+  transform: translateY(-2px);
 }
 
 /* press */
-.quick-menu a:active{
+.quick-menu a:active {
   transform: translateY(4px);
-  box-shadow:
-    0 2px 0 #1b7c98,
-    0 4px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 0 #d97706;
 }
-  
-  /* 🔤 3D TEXT */
-.quick-menu a{
-  color:#ffffff;
 
-  text-shadow:
-    0 1px 0 rgba(255,255,255,0.35), /* top light */
-    0 2px 0 rgba(0,0,0,0.55),               /* depth */
-    0 3px 4px rgba(0,0,0,0.35);   /* soft blur */
-}
+
 
 </style>
 </head>
@@ -896,14 +1059,8 @@ Station Details</li>
 <li class="dropdown">
 <div class="drop-btn">Dashboard</div>
 <ul class="drop-content">
-<li>
-  <a href="#" onclick="openInIframe('https://docs.google.com/spreadsheets/d/1oCawfvjuXAIEjE5Pnv96UynXLAToPFohN_fjC-0-J24/edit?gid=0#gid=0')"> Item 1</a>
-</li>
-
-<li>
-	<a href="https://script.google.com/macros/s/AKfycbw-vhMJUSCaEQzd3Ly23zm-54I8f9BocvaLb_vuPjV10T-6svx78SWqxD5_tYaqhdvaUg/exec" target="_blank" rel="noopener noreferrer">Item 2</a>
-</li>
-
+<li><a href="https://example.com" target="contentFrame">Item 1</a></li>
+<li><a href="https://example.com" target="contentFrame">Item 2</a></li>
 <li><a href="https://example.com" target="contentFrame">Item 3</a></li>
 <li><a href="https://example.com" target="contentFrame">Item 4</a></li>
 <li><a href="https://example.com" target="contentFrame">Item 5</a></li>
@@ -913,8 +1070,14 @@ Station Details</li>
 <li class="dropdown">
 <div class="drop-btn">Management</div>
 <ul class="drop-content">
-<li><a href="https://example.com" target="contentFrame">Item 1</a></li>
-<li><a href="https://example.com" target="contentFrame">Item 2</a></li>
+<li>
+  <a href="#" onclick="openInIframe('https://docs.google.com/spreadsheets/d/1oCawfvjuXAIEjE5Pnv96UynXLAToPFohN_fjC-0-J24/edit?gid=0#gid=0')"> Task</a>
+</li>
+
+  <li>
+  <a href="#" onclick="openInIframe('https://docs.google.com/spreadsheets/d/1F_T7v1-FBnQATiA5s8Xn9N05HuHxWj-7tTrATLqL2kQ/edit?gid=0#gid=0')">Notice</a>
+</li>
+  
 <li><a href="https://example.com" target="contentFrame">Item 3</a></li>
 <li><a href="https://example.com" target="contentFrame">Item 4</a></li>
 <li><a href="https://example.com" target="contentFrame">Item 5</a></li>
@@ -950,7 +1113,7 @@ Station Details</li>
 
     <p class="site-desc">
       An online dashboard where you can manage all your assets data, reports,
-      plans, tasks, and other operational information efficiently from one place.
+      plans, tasks, and other operational information efficiently from.
     </p>
 
     <!-- UPCOMING TASKS -->
@@ -988,7 +1151,7 @@ Station Details</li>
   
   <!-- 🔗 Quick Menu -->
 <div class="quick-menu" id="menu">
-  <a href="#">Station Details</a>
+  <a href="#" onclick="openInIframe('https://failure-report.netlify.app/')">Failure Analysis</a>
   <a href="#">Asset Info</a>
   <a href="#">Reports</a>
   <a href="#">Failure Log</a>
