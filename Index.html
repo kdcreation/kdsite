@@ -192,48 +192,69 @@ header {
 
 
 /* =========================================================
-   5. LOGIN BUTTON (Vibrant 3D Amber Style)
+   5. LOGIN CIRCLE BUTTON (Matches Brand Logo Style)
    ========================================================= */
-   
-.login-btn {
+
+.login-circle-btn {
+    width: 42px;  /* Main logo se thoda chota */
+    height: 42px;
+    border-radius: 50%;
+    background: #cfd8e3; /* Theme Matching */
+    cursor: pointer;
     display: flex;
     flex-direction: column;
-    padding: 10px 20px;
-    background: #f59e0b; /* Aapke example wala Amber/Orange */
-    color: #ffffff; /* White text for high contrast */
-    font-weight: 800;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-right: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.1s ease;
+    align-items: center;
+    justify-content: center;
+    color: #1e40af; /* Blue Accent */
+    margin-right: 8px; /* Tighter right spacing */
+    flex-shrink: 0;
+    transition: all 0.25s ease;
     
-    /* 3D Depth: Bottom dark shadow (#d97706) + Outer soft shadow */
-    box-shadow: 0 5px 0 #d97706, 
-                0 8px 15px rgba(0,0,0,0.2),
-                inset 0 1px 1px rgba(255,255,255,0.4);
-
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    /* Neumorphic Pop-out Shadow */
+    box-shadow: 4px 4px 8px #a6b1bd, 
+                -3px -3px 8px #f8faff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-.login-btn:hover {
-    background: #fbbf24; /* Slightly brighter on hover */
-    transform: translateY(-1px);
-    box-shadow: 0 6px 0 #d97706, 
-                0 10px 20px rgba(0,0,0,0.25);
+/* Hover - Inset Shadow Effect */
+.login-circle-btn:hover {
+    box-shadow: inset 3px 3px 6px #a6b1bd, 
+                inset -3px -3px 6px #f8faff;
+    transform: scale(0.98);
 }
 
-/* Pressed State: Example cards wala "Inset" feel */
-.login-btn:active {
-    transform: translateY(4px); /* Button moves down */
-    background: #f59e0b;
-    /* Box shadow switches to shallow to look pressed */
-    box-shadow: 0 1px 0 #d97706, 
-                inset 2px 2px 5px rgba(0,0,0,0.2);
+/* LOG Text Style */
+.log-text {
+    font-weight: 800;
+    line-height: 1;
+    text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.8);
 }
+
+.log-text.top {
+    font-size: 11px; /* Smaller than main logo */
+}
+
+.log-divider {
+    width: 65%;
+    height: 1.2px;
+    background: #1e40af;
+    margin: 1.5px 0;
+}
+
+.log-text.bottom {
+    font-size: 9px;
+    letter-spacing: 0.5px;
+}
+
+/* Header Right Fix (Ensures alignment with Right Hamburger) */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding-right: 5px;
+}
+
+
 
 
    
@@ -264,124 +285,111 @@ header {
 
 
 /* =========================================================
-   7. LEFT SIDEBAR (Refined Logic & Darker Relative List)
+   7. LEFT SIDEBAR (Updated: 35% Slimmer & 10% Narrower)
    ========================================================= */
-
 .sidebar {
-    width: 230px;
-    padding: 12px 10px;
+    width: 207px; /* Reduced from 230px */
+    padding: 10px 8px;
     background: #cfd8e3;
     box-shadow: 6px 0 15px #a6b1bd;
 }
 
-/* 🏠 HOME BUTTON (Primary Blue) */
 .sidebar li.home-btn {
     list-style: none;
-    font-weight: 800;
-    padding: 12px;
+    font-weight: 700;
+    padding: 8px; 
     color: #fff;
-    border-radius: 14px;
-    margin-bottom: 12px;
+    border-radius: 12px;
+    margin-bottom: 8px;
     background: #1e40af;
     cursor: pointer;
     text-align: center;
-    box-shadow: 0 5px 0 #16318d, 0 8px 15px rgba(30, 64, 175, 0.3);
+    box-shadow: 0 3px 0 #16318d, 0 5px 10px rgba(30, 64, 175, 0.3);
     transition: 0.1s;
 }
 
-/* 🚉 STATION DETAILS BUTTON */
 .sidebar li.station-btn {
     list-style: none;
     font-weight: 700;
-    padding: 12px 15px;
+    padding: 8px 12px; 
     color: #1e293b;
-    border-radius: 12px;
-    margin-bottom: 10px;
+    border-radius: 10px;
+    margin-bottom: 5px;
     background: #cfd8e3;
     cursor: pointer;
-    box-shadow: 5px 5px 10px #a6b1bd, -5px -5px 10px #f8faff;
+    box-shadow: 3px 3px 7px #a6b1bd, -3px -3px 7px #f8faff;
     transition: 0.2s;
 }
 
-/* 🔽 DROPDOWN BUTTONS (With 3D Indicator) */
 .sidebar .drop-btn {
     font-weight: 700;
-    padding: 12px 15px;
+    padding: 8px 12px;
     color: #1e293b;
-    border-radius: 12px;
-    margin-bottom: 10px;
+    border-radius: 10px;
+    margin-bottom: 2px;
     background: #cfd8e3;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    box-shadow: 5px 5px 10px #a6b1bd, -5px -5px 10px #f8faff;
+    box-shadow: 3px 3px 7px #a6b1bd, -3px -3px 7px #f8faff;
 }
 
-/* 3D Arrow Indicator */
 .sidebar .drop-btn::after {
-    content: '▾'; /* Triangle shape */
-    font-size: 18px;
+    content: '▾'; 
+    font-size: 14px;
     color: #1e40af;
     transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-    transform: rotate(-90deg); /* Default Close state */
+    transform: rotate(-90deg);
 }
 
-/* Open State for Dropdown */
 .sidebar .dropdown.open > .drop-btn {
-    box-shadow: inset 4px 4px 8px #a6b1bd, inset -4px -4px 8px #f8faff;
+    box-shadow: inset 3px 3px 5px #a6b1bd, inset -3px -3px 5px #f8faff;
     color: #1e40af;
-    border-radius: 12px 12px 0 0;
+    border-radius: 10px 10px 0 0;
 }
 
-.sidebar .dropdown.open > .drop-btn::after {
-    transform: rotate(0deg); /* Open state down arrow */
-}
+.sidebar .dropdown.open > .drop-btn::after { transform: rotate(0deg); }
 
-/* 📜 DARKER RELATIVE DROPDOWN LIST */
 .sidebar .drop-content {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.4s ease;
-    background: #b8c4d1; /* Gehra shade relative dikhne ke liye */
-    border-radius: 0 0 12px 12px;
-    box-shadow: inset 3px 3px 7px #9ba7b5;
-    margin-bottom: 5px;
+    background: #b8c4d1;
+    border-radius: 0 0 10px 10px;
+    box-shadow: inset 3px 3px 6px #9ba7b5;
+    margin-bottom: 3px;
 }
 
 .sidebar .dropdown.open .drop-content {
     max-height: 500px;
-    padding: 12px 8px;
-    margin-bottom: 15px;
+    padding: 6px 6px;
+    margin-bottom: 10px;
 }
 
-/* List Items - Darker Contrast Rows */
-.sidebar .drop-content li {
-    list-style: none;
-    margin-bottom: 8px;
-}
+.sidebar .drop-content li { list-style: none; margin-bottom: 4px; }
 
 .sidebar .drop-content li a {
     display: block;
-    padding: 10px;
-    background: #a6b1bd; /* Darker than parent background */
-    border-radius: 8px;
-    color: #0f172a !important; /* High contrast dark text */
+    padding: 6px 10px; 
+    background: #a6b1bd;
+    border-radius: 6px;
+    color: #0f172a !important;
     text-decoration: none !important;
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 700;
-    /* Soft shadow to pop out from dark background */
-    box-shadow: 3px 3px 6px #9ba7b5, -2px -2px 5px #c9d5e2;
+    box-shadow: 2px 2px 4px #9ba7b5, -1px -1px 3px #c9d5e2;
     transition: all 0.3s ease;
 }
 
-/* Hover - Analysis Row Pressed Style */
 .sidebar .drop-content li a:hover {
-    box-shadow: inset 3px 3px 6px #8c97a3, inset -2px -2px 5px #f8faff;
+    box-shadow: inset 2px 2px 5px #8c97a3, inset -1px -1px 4px #f8faff;
     color: #1e40af !important;
-    transform: translateX(5px);
+    transform: translateX(3px);
     background: #b1bcc9;
+    padding: 6px 10px;
 }
+
 
 
 /* =========================================================
@@ -413,12 +421,7 @@ iframe {
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* Hover Effect - Deeper Recess */
-iframe:hover {
-    box-shadow: inset 12px 12px 24px #9ba7b5, 
-                inset -10px -10px 20px #f8faff;
-    transform: scale(0.998); /* Halka sa dabne wala feel */
-}
+
 
 
 
@@ -609,207 +612,182 @@ iframe:hover {
 
 
 /* =========================================================
-   12. RIGHT SIDEBAR & SEARCH PANEL (Soft UI Analysis Style)
+   12. RIGHT SIDEBAR - 234px FIXED WIDTH
    ========================================================= */
-
 .right-sidebar {
-    position: relative;
-    top: 0px; 
+    position: fixed;
+    top: 60px;
     right: 0;
-    width: 260px;
+    width: 234px !important; /* Width lock */
     height: calc(100vh - 60px);
-    background: #cfd8e3; /* Main Theme Base */
+    background: #cfd8e3;
     z-index: 999;
-    transition: right 0.3s ease;
-    /* Soft left shadow for elevation */
+    /* Default hidden: slide outside by 234px */
+    transform: translateX(100%); 
+    transition: transform 0.3s ease;
     box-shadow: -6px 0 15px #a6b1bd;
 }
 
+/* JS toggle class triggers this */
+.right-sidebar.active {
+    transform: translateX(0) !important;
+}
+
 .search-panel {
-    width: 260px;
+    width: 100%; /* Parent width (234px) ko follow karega */
     height: 100%;
-    padding: 15px;
-    background: #cfd8e3;
-    border-left: 1.5px solid rgba(255, 255, 255, 0.4);
-    border-radius: 20px 0 0 20px;
+    padding: 10px;
+    box-sizing: border-box; /* Padding doesn't break width */
     display: flex;
     flex-direction: column;
 }
 
-/* 🔍 SEARCH INPUT - Highlighted Inset Look */
 .search-panel input {
     width: 100%;
-    padding: 14px 18px;
-    border-radius: 14px;
+    padding: 9px 14px; 
+    border-radius: 10px;
     border: none;
     outline: none;
-    /* Alag color (Deep Blue-Grey tint) taaki user ko turant dikhe */
     background: #b8c4d1; 
     color: #1e293b;
-    margin-bottom: 20px;
-    font-size: 14px;
+    margin-bottom: 12px;
+    font-size: 13px;
     font-weight: 600;
-    /* Stronger Inset Shadow for focus */
-    box-shadow: inset 4px 4px 8px #9ba7b5, 
-                inset -3px -3px 8px #f8faff;
+    box-shadow: inset 3px 3px 6px #9ba7b5, inset -2px -2px 6px #f8faff;
     transition: all 0.3s ease;
 }
 
-.search-panel input::placeholder {
-    color: #1e40af;
-    opacity: 0.6;
-}
-
-.search-panel input:focus {
-    background: #c3cedb;
-    box-shadow: inset 6px 6px 12px #9ba7b5, 
-                0 0 10px rgba(30, 64, 175, 0.15);
-}
-
-/* 📜 SEARCH LIST ITEMS - Analysis Row Style */
 .search-list li {
     list-style: none;
-    padding: 14px;
-    margin-bottom: 12px;
-    border-radius: 12px;
+    padding: 9px 12px;
+    margin-bottom: 8px;
+    border-radius: 10px;
     cursor: pointer;
     background: #cfd8e3;
     color: #1e293b;
-    font-size: 14.5px;
+    font-size: 13px;
     font-weight: 600;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* Popped out cards */
-    box-shadow: 4px 4px 8px #a6b1bd, 
-                -4px -4px 8px #f8faff;
+    box-shadow: 3px 3px 6px #a6b1bd, -3px -3px 6px #f8faff;
     transition: 0.3s;
 }
 
 .search-list li:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     color: #1e40af;
-    box-shadow: 6px 6px 12px #a6b1bd, 
-                -6px -6px 12px #f8faff;
+    box-shadow: 4px 4px 10px #a6b1bd, -4px -4px 10px #f8faff;
 }
 
-.search-list li:active {
-    transform: translateY(1px);
-    box-shadow: inset 4px 4px 8px #a6b1bd;
-}
-
-.favorite-btn {
-    cursor: pointer;
-    margin-left: 8px;
-    color: #a6b1bd;
-    transition: 0.3s;
-}
-
-.favorite-btn.active, .favorite-btn:hover {
-    color: #1e40af;
-    text-shadow: 0 0 8px rgba(30, 64, 175, 0.3);
-}
-
-/* 🔢 PAGINATION - Soft UI Blocks */
 .pagination button {
     background: #cfd8e3;
     border: none;
     color: #1e293b;
-    padding: 8px 12px;
-    border-radius: 10px;
+    padding: 6px 10px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
-    box-shadow: 3px 3px 6px #a6b1bd, -3px -3px 6px #f8faff;
-    margin: 0 4px;
-}
-
-.pagination button.active {
-    background-color: #1e40af;
-    color: #fff;
-    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.3);
+    box-shadow: 2px 2px 5px #a6b1bd, -2px -2px 5px #f8faff;
+    margin: 0 3px;
 }
 
 /* =========================================================
-   13. RESPONSIVE – SIDEBAR BEHAVIOR (Restored & Styled)
+   13. RESPONSIVE & PIN SYSTEM (Final Sync + Hamburger Fix)
    ========================================================= */
 
-@media (max-width: 1100px) {
-
-    /* Hamburger Buttons ko wapis dikhane ke liye */
-    #sidebarToggleBtn,
-    #rightSidebarToggle {
-        display: block !important; /* Ensure visibility */
-        color: #1e40af; /* Analysis Blue */
-        cursor: pointer;
-        text-shadow: 1px 1px 2px #a6b1bd;
+/* Desktop Pin & Push Logic (1101px se upar ke liye) */
+@media (min-width: 1101px) {
+    .right-sidebar {
+        position: fixed;
+        top: 60px;
+        right: 0;
+        width: 234px !important; 
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
     }
 
-    /* Left Sidebar - Mobile Fixed Position */
+    .right-sidebar.active { 
+        transform: translateX(0) !important; 
+    }
+
+    body.right-open main { 
+        margin-right: 234px !important; 
+    }
+
+    main {
+        transition: margin-right 0.3s ease;
+    }
+
+    .right-pin-bar {
+        position: fixed;
+        top: 45%; 
+        right: 0;
+        width: 10px; 
+        height: 60px;
+        background: #cfd8e3; 
+        border-radius: 10px 0 0 10px;
+        cursor: pointer;
+        z-index: 1200;
+        box-shadow: -4px 4px 8px #a6b1bd;
+        border: 1.5px solid #1e40af;
+        border-right: none;
+    }
+}
+
+/* Tablet/Mobile Sidebar Behavior (1100px se niche ke liye) */
+@media (max-width: 1100px) {
+    
+    /* ✅ HAMBURGER BUTTONS VISIBILITY FIX */
+    #sidebarToggleBtn,
+    #rightSidebarToggle {
+        display: block !important; 
+        color: #1e40af;
+        cursor: pointer;
+        z-index: 2500;
+    }
+
+    /* Left Sidebar Mobile */
     .sidebar {
         position: fixed;
         top: 60px;
         left: 0;
-        height: calc(100vh - 60px);
-        width: 260px; /* Thoda wide for touch */
-        transform: translateX(-100%); /* Hidden by default */
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 207px; 
+        transform: translateX(-105%);
         z-index: 2000;
-        background: #cfd8e3;
-        /* Stronger shadow for mobile overlay */
-        box-shadow: 10px 0 30px rgba(166, 177, 189, 0.8);
+        transition: transform 0.3s ease;
     }
+    .sidebar.show { transform: translateX(0); }
 
-    /* JS logic selector */
-    .sidebar.show {
-        transform: translateX(0);
-    }
-
-    /* Right Sidebar - Mobile Fixed Position */
+    /* Right Sidebar Mobile */
     .right-sidebar {
         position: fixed;
         top: 60px;
-        right: -300px; /* Fully hidden */
-        height: calc(100vh - 60px);
-        width: 280px;
-        transform: none;
-        transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 2000;
-        background: #cfd8e3;
-        box-shadow: -10px 0 30px rgba(166, 177, 189, 0.8);
-    }
-
-    /* JS logic selector */
-    .right-sidebar.active {
         right: 0;
+        width: 234px; 
+        transform: translateX(105%);
+        z-index: 2000;
+        transition: transform 0.3s ease;
+    }
+    .right-sidebar.active { 
+        transform: translateX(0); 
     }
 
-    /* Main Container reset for mobile */
-    .container {
-        display: block; /* Flex ko hata kar stack karne ke liye */
+    /* Reset Mobile Layout */
+    body.right-open main {
+        margin-right: 0 !important;
     }
 
-    .main {
-        width: 100%;
-        padding: 10px;
-    }
-}
-
-/* Tablet/Mobile Brand Hide Logic */
-@media (max-width: 600px) {
-    .brand-text {
-        display: none;
-    }
-    
-    .logo-circle {
-        width: 42px;
-        height: 42px;
+    .main { 
+        width: 100% !important; 
+        margin-right: 0 !important; 
     }
 }
 
 
-
-  
+ 
  /* =========================================================
    DESKTOP RIGHT SIDEBAR PIN SYSTEM (Soft UI Handle)
    ========================================================= */
@@ -1038,8 +1016,12 @@ iframe:hover {
         <span id="time">--:--:--</span>
         <span id="date">--/--/----</span>
     </div>
-    	<!-- Login Button -->
-    <button class="login-btn" onclick="openInIframe('https://kdiste.netlify.app/login.html')">Login</button>
+    	<!-- LOGIN CIRCLE BUTTON (Logo Style Matching) -->
+<div class="login-circle-btn" onclick="openInIframe('https://kdiste.netlify.app/login.html')" title="Login">
+    <div class="log-text top">LOG</div>
+    <div class="log-divider"></div>
+    <div class="log-text bottom">IN</div>
+</div>
     
     <div id="rightSidebarToggle" title="Quick Access">&#9776;</div>
     
@@ -1154,7 +1136,6 @@ Station Details</li>
   <a href="#" onclick="openInIframe('https://failure-report.netlify.app/')">Failure Analysis</a>
   <a href="#">Asset Info</a>
   <a href="#">Reports</a>
-  <a href="#">Failure Log</a>
   <a href="#">Dashboard</a>
   <a href="#">Settings</a>
 </div>
@@ -1373,7 +1354,6 @@ function openHome(){
 const TASK_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTplfPtMJkKImLY81ARasHR5_oCARDV21n5E7UG7gVQYeZ87WALi07ML4V3JBYbGZ7CN0C0TGEdQ2n_/pub?output=csv';
 
 
-
 /* ===============================
    SAFE DATE PARSER (MM/DD/YYYY)
 ================================ */
@@ -1551,7 +1531,7 @@ rightToggle.addEventListener("click", (e) => {
     rightSidebar.classList.toggle("active");
 });
 
-/* =================== GLOBAL OUTSIDE CLICK =================== */
+/* =================== GLOBAL OUTSIDE CLICK (Fixed Push Logic) =================== */
 
 document.addEventListener('click', (e) => {
 
@@ -1559,15 +1539,27 @@ document.addEventListener('click', (e) => {
         sidebar.contains(e.target) ||
         toggleBtn.contains(e.target);
 
+    // Yahan humne rightPinBar ko bhi add kiya hai taaki click sahi se kaam kare
     const isRightSafe =
         rightSidebar.contains(e.target) ||
-        rightToggle.contains(e.target);
+        (typeof rightToggle !== 'undefined' && rightToggle && rightToggle.contains(e.target)) ||
+        (typeof rightPinBar !== 'undefined' && rightPinBar && rightPinBar.contains(e.target));
 
     if (!isLeftSafe && !isRightSafe) {
+        // 1. Left Sidebar band karein
         sidebar.classList.remove('show');
+
+        // 2. Right Sidebar band karein
         rightSidebar.classList.remove('active');
+
+        // 3. MAIN CONTENT KO WAPIS STRETCH KAREIN (Ye class hatana zaroori tha)
+        document.body.classList.remove('right-open');
+
+        // 4. State ko hidden save karein
+        localStorage.setItem("kd_right_sidebar", "hidden");
     }
 });
+
 
 /* ===============================
    Iframe open
@@ -1775,35 +1767,39 @@ renderPage(1);
   
   
   /* =============================================
-   DESKTOP RIGHT SIDEBAR PIN CONTROL
+   DESKTOP RIGHT SIDEBAR PIN CONTROL (Default: Collapsed)
 ============================================= */
 
 const rightPinBar = document.getElementById("rightPinBar");
 
-// Load saved state (desktop only)
+// 1. Force state to "hidden" on every fresh load (Default Collapsed)
 if(window.innerWidth > 1100){
-  const savedState = localStorage.getItem("kd_right_sidebar");
-  if(savedState === "active"){
-      rightSidebar.classList.add("active");
-  }
+    // Sidebar ko band rakhein
+    rightSidebar.classList.remove("active");
+    // Main content ka margin reset rakhein
+    document.body.classList.remove("right-open");
+    // LocalStorage ko bhi reset kar dein taki refresh par band hi mile
+    localStorage.setItem("kd_right_sidebar", "hidden");
 }
 
+// 2. Click logic for toggling
 rightPinBar.addEventListener("click", function(e){
     e.stopPropagation();
 
-    // desktop only
     if(window.innerWidth > 1100){
-
+        // Dono classes ek saath toggle karein (Sidebar + Push effect)
         rightSidebar.classList.toggle("active");
         document.body.classList.toggle("right-open");
 
+        // State save karein taki user agar chahe toh open rakh sake (current session ke liye)
         if(rightSidebar.classList.contains("active")){
-            localStorage.setItem("kd_right_sidebar","active");
-        }else{
-            localStorage.setItem("kd_right_sidebar","hidden");
+            localStorage.setItem("kd_right_sidebar", "active");
+        } else {
+            localStorage.setItem("kd_right_sidebar", "hidden");
         }
     }
 });
+
   
   
   const btn = document.getElementById("btn");
@@ -1818,7 +1814,7 @@ document.onclick = ()=>{
   menu.classList.remove("active");
 }
 
-// 🔥 Screenshot Mode Toggle (Press S)
+// 🔥 Screenshot Mode Toggle (Press Q)
 document.addEventListener("keydown", (e)=>{
   const tag = document.activeElement.tagName;
 
