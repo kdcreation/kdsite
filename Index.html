@@ -680,6 +680,26 @@ iframe {
     box-shadow: 4px 4px 10px #a6b1bd, -4px -4px 10px #f8faff;
 }
 
+.favorite-btn {
+    cursor: pointer;
+    margin-left: 8px;
+    color: #a6b1bd; /* Default Grey Star */
+    transition: all 0.3s ease;
+    font-size: 16px;
+}
+
+/* Jab 3 click ke baad 'active' class add ho */
+.favorite-btn.active {
+    color: #f01628 !important; /* Vibrant Green Color */
+    text-shadow: 0 0 10px rgba(34, 197, 94, 0.4); /* Soft Green Glow */
+    transform: scale(1.2); /* Thoda pop-out effect */
+}
+
+/* Hover par blueish glow (optional) */
+.favorite-btn:hover {
+    color: #f01628;
+}
+   
 .pagination button {
     background: #cfd8e3;
     border: none;
