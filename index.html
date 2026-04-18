@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -285,93 +286,147 @@ header {
 
 
 /* =========================================================
-   7. LEFT SIDEBAR (Updated: 35% Slimmer & 10% Narrower)
+   7. LEFT SIDEBAR (Final Fixed Version: Alignment & Space)
    ========================================================= */
-.sidebar {
-    width: 207px; /* Reduced from 230px */
-    padding: 10px 8px;
+
+/* Main Container to keep Sidebar and Main area together */
+.container {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 70px); /* Header height adjust karein */
+    overflow: hidden;
     background: #cfd8e3;
-    box-shadow: 6px 0 15px #a6b1bd;
 }
 
-.sidebar li.home-btn {
+/* Sidebar Body */
+.sidebar {
+    width: 207px;
+    height: 100%;
+    background: #cfd8e3;
+    box-shadow: 6px 0 15px #a6b1bd;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    z-index: 100;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Jab sidebar collapse hoga (Desktop Pin Bar) */
+.sidebar.collapsed {
+    width: 0px;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* Sidebar Inner Items List (Scrollable) */
+.sidebar ul {
     list-style: none;
+    padding: 15px 12px; /* Perfect spacing for shadows */
+    margin: 0;
+    width: 207px; /* width fix taki collapse me text wrap na ho */
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1;
+    box-sizing: border-box;
+}
+
+/* Spacing between list items */
+.sidebar ul > li {
+    margin-bottom: 12px;
+    list-style: none;
+}
+
+/* HOME BUTTON */
+.sidebar li.home-btn {
     font-weight: 700;
-    padding: 8px; 
+    padding: 10px;
     color: #fff;
     border-radius: 12px;
-    margin-bottom: 8px;
     background: #1e40af;
     cursor: pointer;
     text-align: center;
-    box-shadow: 0 3px 0 #16318d, 0 5px 10px rgba(30, 64, 175, 0.3);
+    box-shadow: 0 4px 0 #16318d, 0 6px 12px rgba(30, 64, 175, 0.3);
     transition: 0.1s;
 }
 
+/* STATION DETAILS BUTTON */
 .sidebar li.station-btn {
-    list-style: none;
     font-weight: 700;
-    padding: 8px 12px; 
+    padding: 10px 15px;
     color: #1e293b;
     border-radius: 10px;
-    margin-bottom: 5px;
     background: #cfd8e3;
     cursor: pointer;
     box-shadow: 3px 3px 7px #a6b1bd, -3px -3px 7px #f8faff;
     transition: 0.2s;
 }
 
+/* DROPDOWN BUTTON STYLE */
 .sidebar .drop-btn {
     font-weight: 700;
-    padding: 8px 12px;
+    height: 41px;
+    padding: 10px 15px;
     color: #1e293b;
     border-radius: 10px;
-    margin-bottom: 2px;
     background: #cfd8e3;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
     box-shadow: 3px 3px 7px #a6b1bd, -3px -3px 7px #f8faff;
+    width: 100%;
+    box-sizing: border-box;
 }
 
+/* Arrow inside dropdown */
 .sidebar .drop-btn::after {
-    content: '▾'; 
-    font-size: 14px;
+    content: '▾';
+    font-size: 20px;
     color: #1e40af;
-    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    transition: 0.4s;
     transform: rotate(-90deg);
 }
 
+/* OPEN STATE: Dropdown button logic */
 .sidebar .dropdown.open > .drop-btn {
     box-shadow: inset 3px 3px 5px #a6b1bd, inset -3px -3px 5px #f8faff;
     color: #1e40af;
-    border-radius: 10px 10px 0 0;
+    border-radius: 10px 10px 0 0; /* Niche ke corners square */
 }
 
-.sidebar .dropdown.open > .drop-btn::after { transform: rotate(0deg); }
+.sidebar .dropdown.open > .drop-btn::after {
+    transform: rotate(0deg);
+}
 
+/* DROPDOWN CONTENT WRAPPER (Aligned with button) */
 .sidebar .drop-content {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.4s ease;
     background: #b8c4d1;
-    border-radius: 0 0 10px 10px;
+    border-radius: 0 0 10px 10px; /* Niche ke corners rounded */
     box-shadow: inset 3px 3px 6px #9ba7b5;
-    margin-bottom: 3px;
+    transition: max-height 0.4s ease;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 8px;
 }
 
+/* When open, show content area */
 .sidebar .dropdown.open .drop-content {
     max-height: 500px;
-    padding: 6px 6px;
-    margin-bottom: 10px;
+    padding: 8px;
 }
 
-.sidebar .drop-content li { list-style: none; margin-bottom: 4px; }
+/* Links inside dropdown */
+.sidebar .drop-content li {
+    margin-bottom: 6px;
+    list-style: none;
+}
 
 .sidebar .drop-content li a {
     display: block;
-    padding: 6px 10px; 
+    padding: 8px 12px;
     background: #a6b1bd;
     border-radius: 6px;
     color: #0f172a !important;
@@ -380,48 +435,138 @@ header {
     font-weight: 700;
     box-shadow: 2px 2px 4px #9ba7b5, -1px -1px 3px #c9d5e2;
     transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .sidebar .drop-content li a:hover {
     box-shadow: inset 2px 2px 5px #8c97a3, inset -1px -1px 4px #f8faff;
     color: #1e40af !important;
     transform: translateX(3px);
-    background: #b1bcc9;
-    padding: 6px 10px;
 }
 
+/* Sidebar Scrollbar */
+.sidebar ul::-webkit-scrollbar { width: 4px; }
+.sidebar ul::-webkit-scrollbar-thumb { background: #a6b1bd; border-radius: 10px; }
+  
+  
+ /* =========================================================
+   DESKTOP LEFT SIDEBAR PIN SYSTEM (Soft UI Handle)
+   ========================================================= */
 
+/* Default Sidebar & Main State (For All Screens) */
+.sidebar {
+    position: fixed;
+    top: 60px; /* Header height ke hisaab se adjust karein */
+    left: -207px; /* Default Chhupa rahega */
+    width: 207px;
+    height: calc(100vh - 60px);
+    background: #cfd8e3;
+    box-shadow: 6px 0 15px #a6b1bd;
+    transition: left 0.3s ease;
+    z-index: 1500;
+}
+
+/* Sidebar Open State (Dono mobile/desktop ke liye) */
+body.left-open .sidebar {
+    left: 0;
+}
+
+/* DESKTOP SPECIFIC (1101px se upar) */
+@media (min-width: 1101px) {
+    /* Main Content Push Effect - Sirf Desktop Par */
+    .main {
+        transition: margin-left 0.3s ease, width 0.3s ease;
+        margin-left: 0;
+    }
+
+    body.left-open .main {
+        margin-left: 207px;
+        width: calc(100% - 207px);
+    }
+
+    /* 3D Pin Bar Handle - Left Style */
+    .left-pin-bar {
+        position: fixed;
+        top: 45%; 
+        left: 0;
+        transform: translateY(-50%);
+        width: 12px; 
+        height: 80px;
+        background: #cfd8e3; 
+        border-radius: 0 12px 12px 0;
+        cursor: pointer;
+        z-index: 1600;
+        box-shadow: 5px 5px 10px #a6b1bd, inset -2px 2px 3px #f8faff;
+        border: 1.5px solid #1e40af;
+        border-left: none;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .left-pin-bar:hover {
+        width: 20px;
+        background: #1e40af;
+        box-shadow: 8px 8px 15px rgba(30, 64, 175, 0.3);
+    }
+
+    .left-pin-bar::after {
+        content: "";
+        position: absolute;
+        right: 4px;
+        top: 25%;
+        width: 2px;
+        height: 50%;
+        background: #1e40af; 
+        border-radius: 2px;
+        box-shadow: -1px 0 1px #f8faff;
+    }
+
+    .left-pin-bar:hover::after { background: #ffffff; }
+
+    /* Jab Sidebar open ho to Handle shift hoga */
+    body.left-open .left-pin-bar {
+        left: 207px;
+    }
+}
+
+/* MOBILE SPECIFIC (1100px se niche) */
+@media (max-width: 1100px) {
+    .left-pin-bar {
+        display: none; /* Mobile par handle chhupa do */
+    }
+    .main {
+        margin-left: 0 !important; /* Mobile par koi margin nahi */
+        width: 100% !important;
+    }
+    .sidebar {
+        z-index: 2100; /* Mobile par content ke upar dikhe */
+    }
+}
 
 /* =========================================================
    8. MAIN CONTENT AREA (Soft UI Recessed Panel)
    ========================================================= */
-
 .main {
     flex: 1; 
     height: 100%; 
     padding: 20px; 
-    background: #cfd8e3; /* Original Body Theme */
+    background: #cfd8e3;
     overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-sizing: border-box;
 }
 
 iframe {
     width: 100%;
     height: 100%;
-    border-radius: 25px; /* Thoda aur rounded for soft UI feel */
+    border-radius: 25px;
     border: none;
     background: #cfd8e3;
-    
-    /* 3D Inset Shadow: Iframe ko dashboard ke andar "dhansa hua" dikhane ke liye */
-    /* Darker grey (#a6b1bd) + Pure White (#f8faff) highlights */
     box-shadow: inset 8px 8px 16px #a6b1bd, 
                 inset -8px -8px 16px #f8faff;
-                
-    /* Subtle edge line for definition */
     border: 1.5px solid rgba(255, 255, 255, 0.4);
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.4s ease;
 }
-
-
 
 
 
@@ -1011,12 +1156,12 @@ iframe {
 
 </style>
 </head>
-<body>
+<body class="left-open">
 
 <header>
     <div id="sidebarToggleBtn">&#9776;</div>
 
-    <div class="brand" onclick="openInIframe('https://kdcreation.github.io/kdsite')">
+    <div class="brand" onclick="openInIframe('https://example.com')">
         <!-- LOGO -->
         <div class="logo-circle">
             <div class="logo-text top">KD</div>
@@ -1051,55 +1196,52 @@ iframe {
 <div class="container">
 
 <!-- Sidebar -->
-<nav class="sidebar">
-<ul>
-<li class="home-btn" onclick="openHome()">Home</li>
-  <li class="station-btn"
+<nav class="sidebar" id="leftSidebar">
+    <!-- Ye div scrollbar handle karega -->
+    <div class="sidebar-content">
+        <ul>
+            <li class="home-btn" onclick="openHome()">Home</li>
+            <li class="station-btn"
 onclick="openInIframe('https://kdcreation.github.io/station_information')">
 Station Details</li>
 
-<li class="dropdown">
-<div class="drop-btn">Dashboard</div>
-<ul class="drop-content">
-<li><a href="https://example.com" target="contentFrame">Item 1</a></li>
-<li><a href="https://example.com" target="contentFrame">Item 2</a></li>
-<li><a href="https://example.com" target="contentFrame">Item 3</a></li>
-<li><a href="https://example.com" target="contentFrame">Item 4</a></li>
-<li><a href="https://example.com" target="contentFrame">Item 5</a></li>
-</ul>
-</li>
+            <!-- Dashboard Dropdown -->
+            <li class="dropdown">
+                <div class="drop-btn" onclick="toggleDropdown(this)">Dashboard</div>
+                <ul class="drop-content">
+                    <li><a href="https://example.com" target="contentFrame">Item 1</a></li>
+                    <li><a href="https://example.com" target="contentFrame">Item 2</a></li>
+                    <li><a href="https://example.com" target="contentFrame">Item 3</a></li>
+                </ul>
+            </li>
 
-<li class="dropdown">
-<div class="drop-btn">Management</div>
-<ul class="drop-content">
-<li>
-  <a href="#" onclick="openInIframe('https://docs.google.com/spreadsheets/d/1oCawfvjuXAIEjE5Pnv96UynXLAToPFohN_fjC-0-J24/edit?gid=0#gid=0')"> Task</a>
-</li>
+            <!-- Management Dropdown -->
+            <li class="dropdown">
+                <div class="drop-btn" onclick="toggleDropdown(this)">Management</div>
+                <ul class="drop-content">
+                    <li><a href="#" onclick="openInIframe('https://docs.google.com/spreadsheets/d/1oCawfvjuXAIEjE5Pnv96UynXLAToPFohN_fjC-0-J24/edit?gid=0#gid=0')"> Task</a></li>
+                    <li><a href="#" onclick="openInIframe('https://docs.google.com/spreadsheets/d/1F_T7v1-FBnQATiA5s8Xn9N05HuHxWj-7tTrATLqL2kQ/edit?gid=0#gid=0')">Notice</a></li>
+                    <li><a href="https://example.com" target="contentFrame">Item 3</a></li>
+                </ul>
+            </li>
 
-  <li>
-  <a href="#" onclick="openInIframe('https://docs.google.com/spreadsheets/d/1F_T7v1-FBnQATiA5s8Xn9N05HuHxWj-7tTrATLqL2kQ/edit?gid=0#gid=0')">Notice</a>
-</li>
-  
-<li><a href="https://example.com" target="contentFrame">Item 3</a></li>
-<li><a href="https://example.com" target="contentFrame">Item 4</a></li>
-<li><a href="https://example.com" target="contentFrame">Item 5</a></li>
-</ul>
-</li>
-
-
-<li class="dropdown">
-<div class="drop-btn">Section</div>
-<ul class="drop-content">
-<li><a href="https://example.com" target="contentFrame">Item 1</a></li>
-<li><a href="https://example.com" target="contentFrame">Item 2</a></li>
-<li><a href="https://example.com" target="contentFrame">Item 3</a></li>
-<li><a href="https://example.com" target="contentFrame">Item 4</a></li>
-<li><a href="https://example.com" target="contentFrame">Item 5</a></li>
-</ul>
-</li>
-
-</ul>
+            <!-- Section Dropdown -->
+            <li class="dropdown">
+                <div class="drop-btn" onclick="toggleDropdown(this)">Section</div>
+                <ul class="drop-content">
+                    <li><a href="https://example.com" target="contentFrame">Item 1</a></li>
+                    <li><a href="https://example.com" target="contentFrame">Item 2</a></li>
+                    <li><a href="https://example.com" target="contentFrame">Item 3</a></li>
+                </ul>
+            </li>
+            
+            <!-- Future mein aur <li> yahan add karte rahein -->
+        </ul>
+    </div>
 </nav>
+  
+   <!-- LEFT PIN BAR -->
+  <div class="left-pin-bar" id="leftPinBar" onclick="toggleLeftSidebar()"></div>
 
 <!-- Main Content -->
 <main class="main">
@@ -1115,7 +1257,7 @@ Station Details</li>
 
     <p class="site-desc">
       An online dashboard where you can manage all your assets data, reports,
-      plans, tasks, and other operational information efficiently from.
+      plans, tasks, and other operational information efficiently.
     </p>
 
     <!-- UPCOMING TASKS -->
@@ -1256,85 +1398,6 @@ Station Details</li>
     <span class="favorite-btn">&#9733;</span>
 </li>
 
-<li>
-    <a href="https://example.com" target="contentFrame">Item 17</a>
-    <span class="favorite-btn">&#9733;</span>
-</li>
-
-<li>
-    <a href="https://example.com" target="contentFrame">Item 18</a>
-    <span class="favorite-btn">&#9733;</span>
-</li>
-
-<li>
-    <a href="https://example.com" target="contentFrame">Item 19</a>
-    <span class="favorite-btn">&#9733;</span>
-</li>
-
-<li>
-    <a href="https://example.com" target="contentFrame">Item 20</a>
-    <span class="favorite-btn">&#9733;</span>
-</li>
-
-<li>
-    <a href="https://example.com" target="contentFrame">Item 21</a>
-    <span class="favorite-btn">&#9733;</span>
-</li>
-
-<li>
-    <a href="https://example.com" target="contentFrame">Item 22</a>
-    <span class="favorite-btn">&#9733;</span>
-</li>
-
-<li>
-    <a href="https://example.com" target="contentFrame">Item 23</a>
-    <span class="favorite-btn">&#9733;</span>
-</li>
-
-<li>
-    <a href="https://example.com" target="contentFrame">Item 24</a>
-    <span class="favorite-btn">&#9733;</span>
-</li>
-
-<li>
-    <a href="https://example.com" target="contentFrame">Item 25</a>
-    <span class="favorite-btn">&#9733;</span>
-</li>
-
-<li>
-    <a href="https://example.com" target="contentFrame">Item 26</a>
-    <span class="favorite-btn">&#9733;</span>
-</li>
-
-<li>
-    <a href="https://example.com" target="contentFrame">Item 27</a>
-    <span class="favorite-btn">&#9733;</span>
-</li>
-
-<li>
-    <a href="https://example.com" target="contentFrame">Item 28</a>
-    <span class="favorite-btn">&#9733;</span>
-</li>
-
-<li>
-    <a href="https://example.com" target="contentFrame">Item 29</a>
-    <span class="favorite-btn">&#9733;</span>
-</li>
-
-<li>
-    <a href="https://example.com" target="contentFrame">Item 30</a>
-    <span class="favorite-btn">&#9733;</span>
-</li>
-
-<li>
-    <a href="https://example.com" target="contentFrame">Item 31</a>
-    <span class="favorite-btn">&#9733;</span>
-</li>
-
-<li>
-    <a href="https://example.com" target="contentFrame">Item 32</a>
-    <span class="favorite-btn">&#9733;</span>
-</li>
 
 <!-- Add all 300 items manually -->
 </ul>
@@ -1344,7 +1407,7 @@ Station Details</li>
 
   <button class="page-btn" data-page="1">1</button>
   <button class="page-btn" data-page="2">2</button>
-  <button class="page-btn" data-page="3">3</button>
+  
 
   <span>...</span>
 
@@ -1366,7 +1429,27 @@ function openHome(){
   iframe.src = "";
   homeCard.style.display = "block";
 }
+ 
+  /* ===============================
+   LEFT PIN BAR
+================================ */
+  
+  function toggleLeftSidebar() {
+    // Body par class toggle karein taki CSS ke push effects trigger hon
+    document.body.classList.toggle('left-open');
+}
 
+  function toggleLeftSidebar() {
+    document.body.classList.toggle('left-open');
+}
+  
+// Agar aap header wale ☰ button se bhi control karna chahte hain:
+document.getElementById('sidebarToggleBtn').onclick = function() {
+    toggleLeftSidebar();
+};
+
+  
+  
 /* ===============================
    GOOGLE SHEET LINK
 ================================ */
@@ -1437,6 +1520,18 @@ async function loadTasks() {
     validTasks.forEach(t => {
       const r = t.raw;
       const tr = document.createElement("tr");
+
+      // Naya Logic: Check Link in Column D (Index 3)
+      const link = r[3] ? r[3].trim() : "";
+      if (link && link.startsWith("http")) {
+        tr.style.cursor = "pointer";
+        tr.onclick = () => window.open(link, "_blank");
+        tr.title = "Click to open link";
+        // Hover effect ke liye simple inline style
+        tr.onmouseover = () => tr.style.backgroundColor = "rgba(30, 64, 175, 0.1)";
+        tr.onmouseout = () => tr.style.backgroundColor = "transparent";
+      }
+
       tr.innerHTML = `
         <td>${r[0]}</td>
         <td>${r[1] || "-"}</td>
@@ -1452,6 +1547,7 @@ async function loadTasks() {
 }
 
 loadTasks();
+
 
 
 /* ===============================
